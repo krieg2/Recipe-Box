@@ -56,3 +56,30 @@ function submitSearch(event){ //this is the function for the submit button on th
 
 $("#submit").on("click", submitSearch);
 
+
+
+// Walmart API search.
+function productSearch(event){
+
+	event.preventDefault();
+	var searchQueryParameter = $("#").val().trim();
+
+	var searchQueryURL = "http://api.walmartlabs.com/v1/search?" +
+	                     "apiKey=z5m92qf29tv7u76f4vaztra4" +
+	                     "&query=" + searchQueryParameter; 
+
+	$.ajax({
+      url: searchQueryURL,
+      method: "GET"
+    }).done(function(response){
+    	//
+    });
+}
+
+
+
+
+
+
+
+
