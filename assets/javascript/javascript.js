@@ -1,12 +1,12 @@
-  var config = {
-    apiKey: "AIzaSyCZV0Z65ENjbB4eYBkBxwa6fg6chRH3iec",
-    authDomain: "testproject-df5f0.firebaseapp.com",
-    databaseURL: "https://testproject-df5f0.firebaseio.com",
-    projectId: "testproject-df5f0",
-    storageBucket: "testproject-df5f0.appspot.com",
-    messagingSenderId: "815993396775"
-  };
-  firebase.initializeApp(config);
+var config = {
+apiKey: "AIzaSyCZV0Z65ENjbB4eYBkBxwa6fg6chRH3iec",
+authDomain: "testproject-df5f0.firebaseapp.com",
+databaseURL: "https://testproject-df5f0.firebaseio.com",
+projectId: "testproject-df5f0",
+storageBucket: "testproject-df5f0.appspot.com",
+messagingSenderId: "815993396775"
+};
+firebase.initializeApp(config);
 
 var database = firebase.database();
 
@@ -55,4 +55,31 @@ function submitSearch(event){ //this is the function for the submit button on th
 }
 
 $("#submit").on("click", submitSearch);
+
+
+
+// Walmart API search.
+function productSearch(event){
+
+	event.preventDefault();
+	var searchQueryParameter = $("#").val().trim();
+
+	var searchQueryURL = "http://api.walmartlabs.com/v1/search?" +
+	                     "apiKey=z5m92qf29tv7u76f4vaztra4" +
+	                     "&query=" + searchQueryParameter; 
+
+	$.ajax({
+      url: searchQueryURL,
+      method: "GET"
+    }).done(function(response){
+    	//
+    });
+}
+
+
+
+
+
+
+
 
