@@ -1,12 +1,12 @@
-  var config = {
-    apiKey: "AIzaSyCZV0Z65ENjbB4eYBkBxwa6fg6chRH3iec",
-    authDomain: "testproject-df5f0.firebaseapp.com",
-    databaseURL: "https://testproject-df5f0.firebaseio.com",
-    projectId: "testproject-df5f0",
-    storageBucket: "testproject-df5f0.appspot.com",
-    messagingSenderId: "815993396775"
-  };
-  firebase.initializeApp(config);
+var config = {
+apiKey: "AIzaSyCZV0Z65ENjbB4eYBkBxwa6fg6chRH3iec",
+authDomain: "testproject-df5f0.firebaseapp.com",
+databaseURL: "https://testproject-df5f0.firebaseio.com",
+projectId: "testproject-df5f0",
+storageBucket: "testproject-df5f0.appspot.com",
+messagingSenderId: "815993396775"
+};
+firebase.initializeApp(config);
 
 var database = firebase.database();
 
