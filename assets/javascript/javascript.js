@@ -18,7 +18,8 @@ var recipeImg=[];
 var baseURI;
 
 
-function searchRecipes(URL, APIkey, CALLBACK){ //ajax function for search recipes 
+function searchRecipes(URL, APIkey, CALLBACK){ //ajax function for search recipes
+
 	$.ajax({
       url: URL,
       method: "GET",
@@ -80,8 +81,6 @@ function createImgTags(){
 
 $("#submit").on("click", submitSearch);
 
-
-
 // Walmart API search.
 function productSearch(event){
 
@@ -90,6 +89,7 @@ function productSearch(event){
 
 	var searchQueryURL = "http://api.walmartlabs.com/v1/search?" +
 	                     "apiKey=z5m92qf29tv7u76f4vaztra4" +
+	                     "&categoryId=976759" +
 	                     "&query=" + searchQueryParameter; 
 
 	$.ajax({
@@ -100,10 +100,41 @@ function productSearch(event){
     });
 }
 
+// Get products for ingredient.
+function ingredientToProduct(event){
 
+    $.ajax({
+      url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/ingredients/map",
+      method: "POST",
+      headers: {	
+      	"X-Mashape-Key": apiKey,
+      	"Content-Type": "application/json",
+		"Accept": "application/json"
+		},
+	  data: JSON.stringify({
+	  	"ingredients": ["eggs"],
+	  	"servings": 2
+	  }),
+	  processData: false,
+	  dataType: "json"
+    }).done(function(response) {
+    	console.log(response)
+    });
+}
 
-
-
-
-
+//Get recipe information.
+function recipeIngredients(event){
+    var s = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/" +
+         "583672" + "/information";
+	$.ajax({
+      url: s,
+      method: "GET",
+      headers: {	
+      	"X-Mashape-Key": apiKey,
+		"Accept": "application/json"
+		}
+    }).done(function(response) {
+    	console.log(response)
+    });
+}
 
