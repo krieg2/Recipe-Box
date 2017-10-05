@@ -18,7 +18,7 @@ var recipeImg=[];
 var baseURI;
 
 
-function searchRecipes(URL, APIkey, CALLBACK){ //ajax function for search recipes 
+function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
 	$.ajax({
       url: URL,
       method: "GET",
@@ -45,7 +45,9 @@ function searchRecipesCallback(response){ //this is the callback function for th
 		//console.log(response.results[i].title);
 		recipesTitles.push(response.results[i].title);
 		recipeImg.push(response.results[i].image);
-	}createImgTags();
+	}
+
+	appendTitleAndImages();
 	
 }
 
@@ -57,19 +59,24 @@ function submitSearch(event){ //this is the function for the submit button on th
 	var cuisine = $("#cuisine-text").val().trim();
 	var searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query=" + SearchQueryParameter; 
 
-	searchRecipes(searchQueryURL, apiKey, searchRecipesCallback);
-	console.log(recipesTitles);
+	ajax(searchQueryURL, apiKey, searchRecipesCallback);
 
 
 
 }
 
-function createImgTags(){
+function appendTitleAndImages(){
 	for(var i=0;i<recipesTitles.length;i++){
 		var imgDiv = $('<div>');
+		var titleDiv = $('<div>');
 		var imgTag = $('<img >');
 		imgTag.attr("src", baseURI+recipeImg[i]);
+		imgTag.attr("width", 200);
+		imgTag.addClass("img-fluid");
 		imgDiv.append(imgTag);
+		imgDiv.addClass("image-container");
+		imgDiv.append(titleDiv);
+		titleDiv.text(recipesTitles[i]);
 		console.log(baseURI+recipeImg[i])
 		console.log(imgDiv);
 		$("#recipe-images").append(imgDiv);
