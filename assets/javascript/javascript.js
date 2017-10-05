@@ -1,10 +1,10 @@
 var config = {
-apiKey: "AIzaSyCZV0Z65ENjbB4eYBkBxwa6fg6chRH3iec",
-authDomain: "testproject-df5f0.firebaseapp.com",
-databaseURL: "https://testproject-df5f0.firebaseio.com",
-projectId: "testproject-df5f0",
-storageBucket: "testproject-df5f0.appspot.com",
-messagingSenderId: "815993396775"
+	apiKey: "AIzaSyCZV0Z65ENjbB4eYBkBxwa6fg6chRH3iec",
+	authDomain: "testproject-df5f0.firebaseapp.com",
+	databaseURL: "https://testproject-df5f0.firebaseio.com",
+	projectId: "testproject-df5f0",
+	storageBucket: "testproject-df5f0.appspot.com",
+	messagingSenderId: "815993396775"
 };
 firebase.initializeApp(config);
 
@@ -15,7 +15,8 @@ var apiKey = "rnhXAWLOK1mshe92gRq8upcR4GQap1kYjhnjsnG92yzGgZRARJ";
 var recipesTitles = [];
 
 
-function searchRecipes(URL, APIkey, CALLBACK){ //ajax function for search recipes 
+function searchRecipes(URL, APIkey, CALLBACK){ //ajax function for search recipes
+
 	$.ajax({
       url: URL,
       method: "GET",
@@ -56,8 +57,6 @@ function submitSearch(event){ //this is the function for the submit button on th
 
 $("#submit").on("click", submitSearch);
 
-
-
 // Walmart API search.
 function productSearch(event){
 
@@ -66,6 +65,7 @@ function productSearch(event){
 
 	var searchQueryURL = "http://api.walmartlabs.com/v1/search?" +
 	                     "apiKey=z5m92qf29tv7u76f4vaztra4" +
+	                     "&categoryId=976759" +
 	                     "&query=" + searchQueryParameter; 
 
 	$.ajax({
@@ -76,10 +76,41 @@ function productSearch(event){
     });
 }
 
+// Get products for ingredient.
+function ingredientToProduct(event){
 
+    $.ajax({
+      url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/ingredients/map",
+      method: "POST",
+      headers: {	
+      	"X-Mashape-Key": apiKey,
+      	"Content-Type": "application/json",
+		"Accept": "application/json"
+		},
+	  data: JSON.stringify({
+	  	"ingredients": ["eggs"],
+	  	"servings": 2
+	  }),
+	  processData: false,
+	  dataType: "json"
+    }).done(function(response) {
+    	console.log(response)
+    });
+}
 
-
-
-
-
+//Get recipe information.
+function recipeIngredients(event){
+    var s = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/" +
+         "583672" + "/information";
+	$.ajax({
+      url: s,
+      method: "GET",
+      headers: {	
+      	"X-Mashape-Key": apiKey,
+		"Accept": "application/json"
+		}
+    }).done(function(response) {
+    	console.log(response)
+    });
+}
 
