@@ -1,0 +1,18 @@
+
+.image-container { 
+	position: relative; 
+	width: 200px; 
+	height: 200px; 
+	overflow: hidden;
+	float: left;
+    margin: 5px;
+}
+
+.image-container img { 
+	position: absolute; 
+}
+
+.image-title {
+	height 20px;
+	width: auto;
+}
