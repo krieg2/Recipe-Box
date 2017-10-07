@@ -72,7 +72,7 @@ function appendTitleAndImages(){
 		var imgContainer = $('<div>');
 		var imgDiv = $('<div>');
 		var titleDiv = $('<div>');
-		var imgTag = $('<img >');
+		var imgTag = $('<img>');
 		imgContainer.addClass("image-container");
 		imgTag.attr("src", baseURI+recipeImg[i]);
 		imgTag.attr("width", 200);
@@ -93,8 +93,8 @@ function appendTitleAndImages(){
 
 $("#submit").on("click", submitSearch);
 
-// Walmart API search.
-function productSearch(event){
+// Walmart API search. Note: this search does not work well. Try using UPC lookup instead.
+/*function productSearch(event){
 
 	event.preventDefault();
 	var searchQueryParameter = $("#").val().trim();
@@ -109,6 +109,40 @@ function productSearch(event){
       method: "GET"
     }).done(function(response){
     	//
+    });
+}*/
+
+// Walmart API lookup by UPC.
+function productLookup(event){
+
+	//event.preventDefault();
+	var searchUPC = $("#").val().trim();
+
+	var searchQueryURL = "http://api.walmartlabs.com/v1/items?apiKey=" +
+	                     "z5m92qf29tv7u76f4vaztra4" +
+	                     "&upc=" + searchUPC;
+
+	$.ajax({
+      url: searchQueryURL,
+      method: "GET"
+    }).done(function(response){
+
+    	console.log(response);
+
+    	var price = response.items.salePrice;
+    	var name = response.items.name;
+    	var imgUrl = response.items.thumbnailImage;
+
+    	var imgTag = $("<img>");
+    	var imgDiv = $("<div>");
+    	imgDiv.text(name + " : " + price);
+    	imgTag.attr("src", imgUrl);
+    	imgDiv.append(imgTag);
+    	$("#shopping-cart").append(imgContainer);
+
+
+    	//$("#shopping-panel").removeClass("hidden");
+
     });
 }
 
