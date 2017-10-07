@@ -21,6 +21,7 @@ var ingredientsList=[];
 
 
 
+
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
 
 	$.ajax({
@@ -64,10 +65,38 @@ function submitSearch(event){ //this is the function for the submit button on th
 	var cuisine = $("#cuisine-text").val().trim();
 	var searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query=" + SearchQueryParameter; 
 
+	//both the cusine filter and checkboxes are populated
+	if(false){
+
+	}
+
+	// else if(!cuisine == ""){
+	// 	searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine;
+
+	// }
+
+	else if(isACheckedBoxChecked()){
+		console.log("a box is checked");
+	}
+
+
 	ajax(searchQueryURL, apiKey, searchRecipesCallback);
 
+}
 
-
+function isACheckedBoxChecked(){
+	if($("#breakfast").is(":checked")){
+		return true;
+	}
+	else  if($("#lunch").is(":checked")){
+		return true;
+	}
+	else if($("#dinner").is(":checked")){
+		return true;
+	}
+	else if($("#desserts").is(":checked")){
+		return true;
+	}
 }
 
 function appendTitleAndImages(){
