@@ -139,16 +139,18 @@ function productLookup(upc){
 	//event.preventDefault();
 	//var searchUPC = $("#").val().trim();
 
-	var searchQueryURL = "http://api.walmartlabs.com/v1/items?apiKey=" +
+	var searchQueryURL = "https://cors-anywhere.herokuapp.com/" + 
+						 "http://api.walmartlabs.com/v1/items?apiKey=" +
 	                     "z5m92qf29tv7u76f4vaztra4" +
 	                     "&upc=" + upc;
 
 	$.ajax({
       url: searchQueryURL,
       method: "GET",
-      dataType: "jsonp",
+      dataType: "json",
       headers: {	
-      	"Content-Type": "application/jsonp"
+      	"Content-Type": "application/json",
+      	"Origin": "http://localhost:8080"
 		}
     }).done(function(response){
 
@@ -156,16 +158,18 @@ function productLookup(upc){
     	console.log(response);
 
         if(typeof(response.items) !== 'undefined'){
-	    	var price = response.items[0].salePrice;
-	    	var name = response.items[0].name;
-	    	var imgUrl = response.items[0].thumbnailImage;
+        	if(typeof(response.items[0].salePrice) !== 'undefined'){
+		    	var price = response.items[0].salePrice;
+		    	var name = response.items[0].name;
+		    	var imgUrl = response.items[0].thumbnailImage;
 
-	    	var imgTag = $("<img>");
-	    	var imgDiv = $("<div>");
-	    	imgDiv.text(name + " : " + price);
-	    	imgTag.attr("src", imgUrl);
-	    	imgDiv.append(imgTag);
-	    	$("#shopping-cart").append(imgDiv);
+		    	var imgTag = $("<img>");
+		    	var imgDiv = $("<div>");
+		    	imgDiv.text(name + " : " + price);
+		    	imgTag.attr("src", imgUrl);
+		    	imgDiv.append(imgTag);
+		    	$("#shopping-cart").append(imgDiv);
+	    	}
     	}
 
     });
@@ -199,7 +203,7 @@ function ingredientsToProduct(){
     		for(var j=0; j<limit; j++){
     			if(typeof(response[i].products[j]) !== 'undefined'){
 	    			var upc = response[i].products[j].upc;
-	    			x += 500;
+	    			x += 2000;
 	    			console.log("looking up: " + upc);
 	    			timerId = setTimeout(productLookup(upc), x);
     			}
