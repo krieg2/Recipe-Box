@@ -18,7 +18,7 @@ var recipeImg=[];
 var recipeID=[];
 var baseURI;
 var ingredientsList=[];
-
+var ingredientNames=[];
 
 
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
@@ -116,20 +116,21 @@ $("#submit").on("click", submitSearch);
 }*/
 
 // Walmart API lookup by UPC.
-function productLookup(event){
+function productLookup(upc){
 
 	//event.preventDefault();
-	var searchUPC = $("#").val().trim();
+	//var searchUPC = $("#").val().trim();
 
 	var searchQueryURL = "http://api.walmartlabs.com/v1/items?apiKey=" +
 	                     "z5m92qf29tv7u76f4vaztra4" +
-	                     "&upc=" + searchUPC;
+	                     "&upc=" + upc;
 
 	$.ajax({
       url: searchQueryURL,
       method: "GET"
     }).done(function(response){
 
+        console.log("UPC response");
     	console.log(response);
 
     	var price = response.items.salePrice;
@@ -141,16 +142,13 @@ function productLookup(event){
     	imgDiv.text(name + " : " + price);
     	imgTag.attr("src", imgUrl);
     	imgDiv.append(imgTag);
-    	$("#shopping-cart").append(imgContainer);
-
-
-    	//$("#shopping-panel").removeClass("hidden");
+    	$("#shopping-cart").append(imgContainer); 	
 
     });
 }
 
 // Get products for ingredient.
-function ingredientToProduct(event){
+function ingredientsToProduct(){
 
     $.ajax({
       url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/ingredients/map",
@@ -161,13 +159,23 @@ function ingredientToProduct(event){
 		"Accept": "application/json"
 		},
 	  data: JSON.stringify({
-	  	"ingredients": ["eggs"],
+	  	"ingredients": ingredientNames,
 	  	"servings": 2
 	  }),
 	  processData: false,
 	  dataType: "json"
     }).done(function(response) {
-    	console.log(response)
+
+    	console.log(response);
+    	var limit = 5;
+    	for(var i=0; i<response.length; i++){
+    		for(var j=0; j<limit; j++){
+    			var upc = response[j].products[j].upc;
+    			productLookup(upc);
+    		}
+    	}
+    	$("#shopping-panel").removeClass("hidden");
+
     });
 }
 
@@ -199,12 +207,13 @@ $("#recipe-images").on("click","img",function(event){
       	"Content-Type": "application/json",
 		},
     }).done(function(response) {
+    	console.log(response);
     	for(var i=0;i<response[0].extendedIngredients.length;i++){
     		ingredientsList.push(response[0].extendedIngredients[i].originalString);
-
+            ingredientNames.push(response[0].extendedIngredients[i].name);
     	}
     	createIngredientList();
-    	
+    	ingredientsToProduct();
     });
 })
 
@@ -219,6 +228,5 @@ function createIngredientList(){
 	}
 	$("#recipe-panel").addClass("hidden");
 	$("#ingredient-panel").removeClass("hidden");
-
 
 }
