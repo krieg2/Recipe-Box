@@ -18,7 +18,7 @@ var recipeImg=[];
 var recipeID=[];
 var baseURI;
 var ingredientsList=[];
-var selectedCheckbox = [];
+
 
 
 
@@ -62,27 +62,34 @@ function submitSearch(event){ //this is the function for the submit button on th
 	var SearchQueryParameter = $("#ingredient-text").val().trim();
 	var cuisine = $("#cuisine-text").val().trim();
 	var searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query=" + SearchQueryParameter; 
+	var selectedCheckbox = whichCheckedBoxChecked();
 
-	//both the cusine filter and checkboxes are populated
-	if(false){
+	//both the cuisine filter and checkboxes are populated
+	if(!cuisine == "" && selectedCheckbox>0){
+		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ joinedSelectedCheckboxes;;
+		console.log(searchQueryURL);
+	}
+	// if just the cuisine filter is filled out 
+	else if(!cuisine == ""){
+		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine;
+		console.log(searchQueryURL);
+	}
+	// if just the checkbox filter is selected 
+	else if(selectedCheckbox.length>0){
+		var joinedSelectedCheckboxes = selectedCheckbox.join();
+		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&type="+ joinedSelectedCheckboxes;
+		console.log(searchQueryURL);
 
 	}
 
-	// else if(!cuisine == ""){
-	// 	searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine;
-
-	// }
-
-	else if(selectedCheckbox.length>1){
-
-	}
-
-
+	// if no filters are selected 
 	ajax(searchQueryURL, apiKey, searchRecipesCallback);
 
 }
 
+// makes an array of what checkboxes are filled out
 function whichCheckedBoxChecked(){
+	var selectedCheckbox = [];
 	if($("#breakfast").is(":checked")){
 		selectedCheckbox.push("breakfast");
 	}
@@ -95,6 +102,7 @@ function whichCheckedBoxChecked(){
 	if($("#desserts").is(":checked")){
 		selectedCheckbox.push("desserts");
 	}
+	return selectedCheckbox; 
 }
 
 function appendTitleAndImages(){
