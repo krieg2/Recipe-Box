@@ -62,11 +62,12 @@ function submitSearch(event){ //this is the function for the submit button on th
 	var SearchQueryParameter = $("#ingredient-text").val().trim();
 	var cuisine = $("#cuisine-text").val().trim();
 	var searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query=" + SearchQueryParameter; 
-	var selectedCheckbox = whichCheckedBoxChecked();
+	var selectedRadioButton;
 
 	//both the cuisine filter and checkboxes are populated
-	if(!cuisine == "" && selectedCheckbox>0){
-		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ joinedSelectedCheckboxes;;
+	if(!cuisine == "" && $('input[name=type]:checked').length > 0){
+		selectedRadioButton = $('input[name=type]:checked').val();
+		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ selectedRadioButton;
 		console.log(searchQueryURL);
 	}
 	// if just the cuisine filter is filled out 
@@ -75,34 +76,15 @@ function submitSearch(event){ //this is the function for the submit button on th
 		console.log(searchQueryURL);
 	}
 	// if just the checkbox filter is selected 
-	else if(selectedCheckbox.length>0){
-		var joinedSelectedCheckboxes = selectedCheckbox.join();
-		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&type="+ joinedSelectedCheckboxes;
+	else if($('input[name=type]:checked').length > 0){
+		selectedRadioButton = $('input[name=type]:checked').val();
+		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&type=" + selectedRadioButton;
 		console.log(searchQueryURL);
-
 	}
 
 	// if no filters are selected 
 	ajax(searchQueryURL, apiKey, searchRecipesCallback);
 
-}
-
-// makes an array of what checkboxes are filled out
-function whichCheckedBoxChecked(){
-	var selectedCheckbox = [];
-	if($("#breakfast").is(":checked")){
-		selectedCheckbox.push("breakfast");
-	}
-	if($("#lunch").is(":checked")){
-		selectedCheckbox.push("lunch");
-	}
-	if($("#dinner").is(":checked")){
-		selectedCheckbox.push("dinner");
-	}
-	if($("#desserts").is(":checked")){
-		selectedCheckbox.push("desserts");
-	}
-	return selectedCheckbox; 
 }
 
 function appendTitleAndImages(){
