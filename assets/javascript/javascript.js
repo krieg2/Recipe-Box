@@ -19,6 +19,7 @@ var recipeID=[];
 var baseURI;
 var ingredientsList=[];
 var ingredientNames=[];
+var timerId;
 
 
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
@@ -128,7 +129,10 @@ function productLookup(upc){
 	$.ajax({
       url: searchQueryURL,
       method: "GET",
-      dataType: "jsonp"
+      dataType: "jsonp",
+      headers: {	
+      	"Content-Type": "application/jsonp"
+		}
     }).done(function(response){
 
         console.log("UPC response");
@@ -169,12 +173,19 @@ function ingredientsToProduct(){
 	  dataType: "json"
     }).done(function(response) {
 
+        console.log("ingredients to product results");
     	console.log(response);
     	var limit = 5;
+    	var x = 0;
     	for(var i=0; i<response.length; i++){
+    		
     		for(var j=0; j<limit; j++){
-    			var upc = response[j].products[j].upc;
-    			productLookup(upc);
+    			if(typeof(response[i].products[j]) !== 'undefined'){
+	    			var upc = response[i].products[j].upc;
+	    			x += 500;
+	    			console.log("looking up: " + upc);
+	    			timerId = setTimeout(productLookup(upc), x);
+    			}
     		}
     	}
     	$("#shopping-panel").removeClass("hidden");
@@ -201,7 +212,7 @@ function recipeIngredients(event){
 $("#recipe-images").on("click","img",function(event){
 	event.preventDefault();
 	var recipeID = $(this).attr("data-recipe-id");
-	console.log("hi");
+	//console.log("hi");
 	$.ajax({
       url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk?ids="+recipeID+"&includeNutrition=false",
       method: "GET",
