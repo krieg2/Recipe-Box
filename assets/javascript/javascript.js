@@ -15,7 +15,9 @@ var searchURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/reci
 var apiKey = "rnhXAWLOK1mshe92gRq8upcR4GQap1kYjhnjsnG92yzGgZRARJ";
 var recipesTitles = [];
 var recipeImg=[];
+var recipeID=[];
 var baseURI;
+var ingredientsList=[];
 
 
 
@@ -40,16 +42,17 @@ function searchRecipesCallback(response){ //this is the callback function for th
 	})
 
 	baseURI = response.baseUri;
-	console.log(baseURI);
 
 	// going to get the title from each result and console log it 
 	for(i=0; i<response.results.length; i++){
 		//console.log(response.results[i].title);
 		recipesTitles.push(response.results[i].title);
 		recipeImg.push(response.results[i].image);
-	}
+		recipeID.push(response.results[i].id);
 
-	appendTitleAndImages();
+		
+		
+	}appendTitleAndImages();
 	
 }
 
@@ -83,8 +86,8 @@ function appendTitleAndImages(){
 		titleDiv.addClass("image-title");
 		titleDiv.text(recipesTitles[i]);
 		imgContainer.append(imgDiv);
-		console.log(baseURI+recipeImg[i])
-		console.log(imgDiv);
+		imgTag.attr("data-recipe-id",recipeID[i]);
+		imgDiv.append(imgTag);
 		$("#recipe-images").append(imgContainer);
 	}
 	
@@ -150,3 +153,38 @@ function recipeIngredients(event){
     });
 }
 
+$("#recipe-images").on("click","img",function(event){
+	event.preventDefault();
+	var recipeID = $(this).attr("data-recipe-id");
+	console.log("hi");
+	$.ajax({
+      url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk?ids="+recipeID+"&includeNutrition=false",
+      method: "GET",
+      headers: {	
+      	"X-Mashape-Key": apiKey,
+      	"Content-Type": "application/json",
+		},
+    }).done(function(response) {
+    	for(var i=0;i<response[0].extendedIngredients.length;i++){
+    		ingredientsList.push(response[0].extendedIngredients[i].originalString);
+
+    	}
+    	createIngredientList();
+    	
+    });
+})
+
+
+
+function createIngredientList(){
+	
+	for(var i=0;i<ingredientsList.length;i++){
+		ingredientDiv = $("<div>");
+		ingredientDiv.html(ingredientsList[i]);
+		$("#ingredients").append(ingredientDiv);
+	}
+	$("#recipe-panel").addClass("hidden");
+	$("#ingredient-panel").removeClass("hidden");
+
+
+}
