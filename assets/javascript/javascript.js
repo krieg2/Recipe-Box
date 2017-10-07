@@ -127,22 +127,25 @@ function productLookup(upc){
 
 	$.ajax({
       url: searchQueryURL,
-      method: "GET"
+      method: "GET",
+      dataType: "jsonp"
     }).done(function(response){
 
         console.log("UPC response");
     	console.log(response);
 
-    	var price = response.items.salePrice;
-    	var name = response.items.name;
-    	var imgUrl = response.items.thumbnailImage;
+        if(typeof(response.items) !== 'undefined'){
+	    	var price = response.items[0].salePrice;
+	    	var name = response.items[0].name;
+	    	var imgUrl = response.items[0].thumbnailImage;
 
-    	var imgTag = $("<img>");
-    	var imgDiv = $("<div>");
-    	imgDiv.text(name + " : " + price);
-    	imgTag.attr("src", imgUrl);
-    	imgDiv.append(imgTag);
-    	$("#shopping-cart").append(imgContainer); 	
+	    	var imgTag = $("<img>");
+	    	var imgDiv = $("<div>");
+	    	imgDiv.text(name + " : " + price);
+	    	imgTag.attr("src", imgUrl);
+	    	imgDiv.append(imgTag);
+	    	$("#shopping-cart").append(imgDiv);
+    	}
 
     });
 }
