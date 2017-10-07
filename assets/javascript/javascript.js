@@ -22,6 +22,8 @@ var ingredientNames=[];
 var timerId;
 
 
+
+
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
 
 	$.ajax({
@@ -35,7 +37,6 @@ function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes
 }
 
 function searchRecipesCallback(response){ //this is the callback function for the ajax search recipes 
-	console.log(response);
 	// put stuff to firebase
 	// TODO - we should delete the object from the previous search and put in the new one. 
 	database.ref("search").set({
@@ -49,11 +50,9 @@ function searchRecipesCallback(response){ //this is the callback function for th
 		//console.log(response.results[i].title);
 		recipesTitles.push(response.results[i].title);
 		recipeImg.push(response.results[i].image);
-		recipeID.push(response.results[i].id);
-
-		
-		
-	}appendTitleAndImages();
+		recipeID.push(response.results[i].id);	
+	}
+	appendTitleAndImages();
 	
 }
 
@@ -64,10 +63,28 @@ function submitSearch(event){ //this is the function for the submit button on th
 	var SearchQueryParameter = $("#ingredient-text").val().trim();
 	var cuisine = $("#cuisine-text").val().trim();
 	var searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query=" + SearchQueryParameter; 
+	var selectedRadioButton;
 
+	//both the cuisine filter and checkboxes are populated
+	if(!cuisine == "" && $('input[name=type]:checked').length > 0){
+		selectedRadioButton = $('input[name=type]:checked').val();
+		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ selectedRadioButton;
+		console.log(searchQueryURL);
+	}
+	// if just the cuisine filter is filled out 
+	else if(!cuisine == ""){
+		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine;
+		console.log(searchQueryURL);
+	}
+	// if just the checkbox filter is selected 
+	else if($('input[name=type]:checked').length > 0){
+		selectedRadioButton = $('input[name=type]:checked').val();
+		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&type=" + selectedRadioButton;
+		console.log(searchQueryURL);
+	}
+
+	// if no filters are selected 
 	ajax(searchQueryURL, apiKey, searchRecipesCallback);
-
-
 
 }
 
