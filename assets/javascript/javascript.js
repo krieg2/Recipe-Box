@@ -67,19 +67,23 @@ function submitSearch(event){ //this is the function for the submit button on th
 
 function appendTitleAndImages(){
 	for(var i=0;i<recipesTitles.length;i++){
+		var imgContainer = $('<div>');
 		var imgDiv = $('<div>');
 		var titleDiv = $('<div>');
 		var imgTag = $('<img >');
+		imgContainer.addClass("image-container");
 		imgTag.attr("src", baseURI+recipeImg[i]);
 		imgTag.attr("width", 200);
 		imgTag.addClass("img-fluid");
 		imgDiv.append(imgTag);
-		imgDiv.addClass("image-container");
-		imgDiv.append(titleDiv);
+		imgDiv.addClass("image-div");
+		imgContainer.append(titleDiv);
+		titleDiv.addClass("image-title");
 		titleDiv.text(recipesTitles[i]);
+		imgContainer.append(imgDiv);
 		console.log(baseURI+recipeImg[i])
 		console.log(imgDiv);
-		$("#recipe-images").append(imgDiv);
+		$("#recipe-images").append(imgContainer);
 	}
 	
 	$("#recipe-panel").removeClass("hidden");
