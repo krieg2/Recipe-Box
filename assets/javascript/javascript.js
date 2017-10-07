@@ -18,6 +18,7 @@ var recipeImg=[];
 var recipeID=[];
 var baseURI;
 var ingredientsList=[];
+var selectedCheckbox = [];
 
 
 
@@ -35,7 +36,6 @@ function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes
 }
 
 function searchRecipesCallback(response){ //this is the callback function for the ajax search recipes 
-	console.log(response);
 	// put stuff to firebase
 	// TODO - we should delete the object from the previous search and put in the new one. 
 	database.ref("search").set({
@@ -49,11 +49,9 @@ function searchRecipesCallback(response){ //this is the callback function for th
 		//console.log(response.results[i].title);
 		recipesTitles.push(response.results[i].title);
 		recipeImg.push(response.results[i].image);
-		recipeID.push(response.results[i].id);
-
-		
-		
-	}appendTitleAndImages();
+		recipeID.push(response.results[i].id);	
+	}
+	appendTitleAndImages();
 	
 }
 
@@ -75,8 +73,8 @@ function submitSearch(event){ //this is the function for the submit button on th
 
 	// }
 
-	else if(isACheckedBoxChecked()){
-		console.log("a box is checked");
+	else if(selectedCheckbox.length>1){
+
 	}
 
 
@@ -84,18 +82,18 @@ function submitSearch(event){ //this is the function for the submit button on th
 
 }
 
-function isACheckedBoxChecked(){
+function whichCheckedBoxChecked(){
 	if($("#breakfast").is(":checked")){
-		return true;
+		selectedCheckbox.push("breakfast");
 	}
-	else  if($("#lunch").is(":checked")){
-		return true;
+	if($("#lunch").is(":checked")){
+		selectedCheckbox.push("lunch");
 	}
-	else if($("#dinner").is(":checked")){
-		return true;
+	if($("#dinner").is(":checked")){
+		selectedCheckbox.push("dinner");
 	}
-	else if($("#desserts").is(":checked")){
-		return true;
+	if($("#desserts").is(":checked")){
+		selectedCheckbox.push("desserts");
 	}
 }
 
