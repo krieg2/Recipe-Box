@@ -16,3 +16,9 @@
 	height 20px;
 	width: auto;
 }
+
+.carousel{
+	width: 200px;
+	height: 100px;
+	float: right;
+}
