@@ -111,23 +111,37 @@ function appendTitleAndImages(){
 $("#submit").on("click", submitSearch);
 
 // Walmart API search. Note: this search does not work well. Try using UPC lookup instead.
-/*function productSearch(event){
+function productSearch(ingredient, ingredientNum){
 
-	event.preventDefault();
-	var searchQueryParameter = $("#").val().trim();
+	//event.preventDefault();
+	//var searchQueryParameter = $("#").val().trim();
 
-	var searchQueryURL = "http://api.walmartlabs.com/v1/search?" +
+	var searchQueryURL = "https://cors-anywhere.herokuapp.com/" + 
+	                     "http://api.walmartlabs.com/v1/search?" +
 	                     "apiKey=z5m92qf29tv7u76f4vaztra4" +
 	                     "&categoryId=976759" +
-	                     "&query=" + searchQueryParameter; 
+	                     "&query=" + ingredient; 
 
 	$.ajax({
       url: searchQueryURL,
-      method: "GET"
+      method: "GET",
+      headers: {	
+       	"X-Requested-With": "XMLHttpRequest"
+	  }      
     }).done(function(response){
-    	//
+
+    	console.log(response);
+
+    	for(var i=0; i<response.items.length; i++){
+
+		   var name = response.items[i].name;
+		   var imgUrl = response.items[i].thumbnailImage;
+		   var price = response.items[i].salePrice;
+
+		   addItemToCarousel(ingredientNum, name, imgUrl);
+		}
     });
-}*/
+}
 
 // Walmart API lookup by UPC.
 function productLookup(upc, ingredientNum){
@@ -258,7 +272,18 @@ $("#recipe-images").on("click","img",function(event){
     	createIngredientList(ingredientsList);
 
     	//Lookup the UPCs for each ingredient.
-    	ingredientsToProduct(ingredientNames);
+    	//ingredientsToProduct(ingredientNames);
+    	var limit = 5;
+    	var delay = 0;
+    	for(var i=0; i<ingredientNames.length; i++){
+ 
+			var name = ingredientNames[i];
+
+			delay += 500;
+
+			timerId = setTimeout(productSearch, delay, name, i);
+    		$("#ingredient_"+i).append(createCarousel(i));
+    	}
 
     	//Add the recipe to the page.
 		var recipe = response[0].instructions;
