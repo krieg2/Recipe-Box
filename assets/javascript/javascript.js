@@ -301,7 +301,7 @@ function createIngredientList(ingredientsList){
 		ingredientDiv.html(ingredientsList[i]);
 		ingredientDiv.attr("id", "ingredient_"+i);
 
-		ingredientDiv.css("min-height", "120px");
+		ingredientDiv.css("min-height", "160px");
 		$("#ingredients").append(ingredientDiv);
 	}
 	$("#recipe-panel").addClass("hidden");
@@ -345,9 +345,9 @@ function addItemToCarousel(cNum, caption, url){
 
 
 	var item = $("<div class='item "+active+"'></div>");
-    item.append("<img src='"+url+"' alt=''>");
-    var divCap = $("<div class='carousel-caption'></div>");
-    divCap.append("<h3>"+caption+"</h3>");
+    item.append("<img class='carousel-image' src='"+url+"' alt=''>");
+    var divCap = $("<div class='c-caption'></div>");
+    divCap.append("<h2><strong>"+caption+"</strong></h2>");
     item.append(divCap);
 
     $(id).children(".carousel-inner").append(item);
