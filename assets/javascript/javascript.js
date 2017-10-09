@@ -18,6 +18,7 @@ var recipeImg=[];
 var recipeID=[];
 var baseURI;
 var timerId;
+var recipeTitle;
 
 
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
@@ -109,6 +110,7 @@ function appendTitleAndImages(){
 		imgDiv.addClass("image-div");
 		imgContainer.append(titleDiv);
 		titleDiv.addClass("image-title");
+		imgTag.attr("data-recipe-title",recipesTitles[i]);
 		titleDiv.text(recipesTitles[i]);
 		imgContainer.append(imgDiv);
 		imgTag.attr("data-recipe-id",recipeID[i]);
@@ -258,6 +260,8 @@ $("#recipe-images").on("click","img",function(event){
 
 	event.preventDefault();
 	var recipeID = $(this).attr("data-recipe-id");
+	recipeTitle = $(this).attr("data-recipe-title");
+
 
 	$.ajax({
       url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk?ids="+recipeID+"&includeNutrition=false",
@@ -307,6 +311,7 @@ $("#recipe-images").on("click","img",function(event){
 
 function createIngredientList(ingredientsList){
 	
+	$("#ingredients").html(recipeTitle);
 	for(var i=0; i < ingredientsList.length; i++){
 
 		ingredientDiv = $("<div>");
