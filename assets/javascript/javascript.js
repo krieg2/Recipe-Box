@@ -268,7 +268,8 @@ $("#recipe-images").on("click","img",function(event){
 		}
     }).done(function(response) {
 
-    	//console.log(response); 	
+        console.log("recipe response");
+    	console.log(response); 	
     	
     	//Store the ingredients in array.
     	var ingredientsList=[];
