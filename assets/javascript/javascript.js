@@ -96,6 +96,8 @@ function submitSearch(event){ //this is the function for the submit button on th
 
 }
 
+
+
 function appendTitleAndImages(){
 	for(var i=0;i<recipesTitles.length;i++){
 		var imgContainer = $('<div>');
@@ -121,7 +123,15 @@ function appendTitleAndImages(){
 	$("#recipe-panel").removeClass("hidden");
 }
 
+function ingredientBackButton(){
+	$("#recipe-panel").removeClass("hidden");
+	$("#ingredient-panel").addClass("hidden");
+	//$("#ingredient-panel").empty();
+
+}
+
 $("#submit").on("click", submitSearch);
+$("#ingredient-back-button").on("click", ingredientBackButton);
 
 // Walmart API search. Note: this search does not work well. Try using UPC lookup instead.
 function productSearch(ingredient, ingredientNum){
