@@ -40,6 +40,7 @@ function searchRecipesCallback(response){ //this is the callback function for th
 		response
 	})
 
+	console.log(response);
 	baseURI = response.baseUri;
 	recipesTitles = [];
 	recipeImg=[];
@@ -47,11 +48,18 @@ function searchRecipesCallback(response){ //this is the callback function for th
 
 	// going to get the title from each result and console log it 
 
+
+
 	for(i=0; i<response.results.length; i++){
 		////console.log(response.results[i].title);
 		recipesTitles.push(response.results[i].title);
 		recipeImg.push(response.results[i].image);
 		recipeID.push(response.results[i].id);	
+	}
+
+	if(response.results <1){
+		$("#recipe-images").html("No results found.");
+		$("#recipe-panel").removeClass("hidden");
 	}
 	appendTitleAndImages();
 	
