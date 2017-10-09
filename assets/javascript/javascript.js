@@ -129,7 +129,15 @@ function appendTitleAndImages(){
 	$("#recipe-panel").removeClass("hidden");
 }
 
+function ingredientBackButton(){
+	$("#recipe-panel").removeClass("hidden");
+	$("#ingredient-panel").addClass("hidden");
+	$("#ingredients").empty();
+
+}
+
 $("#submit").on("click", submitSearch);
+$("#ingredient-back-button").on("click", ingredientBackButton);
 
 // Walmart API search. Note: this search does not work well. Try using UPC lookup instead.
 function productSearch(ingredient, ingredientNum){

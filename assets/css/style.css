@@ -36,3 +36,11 @@ ol.carousel-indicators {
   right: 0;
   width: auto;
 }
+
+.back-button{
+	float: right;
+}
+
+.ingredients-title{
+	margin-bottom: 15px;
+}
