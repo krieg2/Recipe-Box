@@ -40,8 +40,12 @@ function searchRecipesCallback(response){ //this is the callback function for th
 	})
 
 	baseURI = response.baseUri;
+	recipesTitles = [];
+	recipeImg=[];
+	recipeID=[];
 
 	// going to get the title from each result and console log it 
+
 	for(i=0; i<response.results.length; i++){
 		////console.log(response.results[i].title);
 		recipesTitles.push(response.results[i].title);
@@ -55,7 +59,13 @@ function searchRecipesCallback(response){ //this is the callback function for th
 function submitSearch(event){ //this is the function for the submit button on the search form
 	// hide search form 
 	// display results under the recipes panal 
+	$("#ingredient-panel").addClass("hidden");
+	$("#recipe-images").empty();
+	$("#ingredients").empty();
+
+	console.log("emptied");
 	event.preventDefault();
+	
 	var SearchQueryParameter = $("#ingredient-text").val().trim();
 	var cuisine = $("#cuisine-text").val().trim();
 	var searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query=" + SearchQueryParameter; 
@@ -81,6 +91,7 @@ function submitSearch(event){ //this is the function for the submit button on th
 
 	// if no filters are selected 
 	ajax(searchQueryURL, apiKey, searchRecipesCallback);
+	console.log("searched");
 
 }
 
@@ -290,6 +301,7 @@ $("#recipe-images").on("click","img",function(event){
     	recipeDiv = $("<div>");
 		recipeDiv.html("<br><h3><strong>Recipe: </h3></strong><br><p>"+recipe+"</p>");
 		$("#ingredients").append(recipeDiv);   
+		
     });
 })
 
