@@ -96,8 +96,6 @@ function submitSearch(event){ //this is the function for the submit button on th
 
 }
 
-
-
 function appendTitleAndImages(){
 	for(var i=0;i<recipesTitles.length;i++){
 		var imgContainer = $('<div>');
@@ -126,7 +124,7 @@ function appendTitleAndImages(){
 function ingredientBackButton(){
 	$("#recipe-panel").removeClass("hidden");
 	$("#ingredient-panel").addClass("hidden");
-	//$("#ingredient-panel").empty();
+	$("#ingredients").empty();
 
 }
 
