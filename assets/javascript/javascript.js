@@ -15,10 +15,14 @@ var searchURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/reci
 var apiKey = "rnhXAWLOK1mshe92gRq8upcR4GQap1kYjhnjsnG92yzGgZRARJ";
 var recipesTitles = [];
 var recipeImg=[];
-var recipeID=[];
+var recipeIDArray=[];
 var baseURI;
 var timerId;
 var recipeTitle;
+var ingredientsList=[];
+var ingredientNames=[];
+var recipe;
+var recipeID;
 
 
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
@@ -44,7 +48,7 @@ function searchRecipesCallback(response){ //this is the callback function for th
 	baseURI = response.baseUri;
 	recipesTitles = [];
 	recipeImg=[];
-	recipeID=[];
+	recipeIDArray=[];
 
 	// going to get the title from each result and console log it 
 
@@ -54,7 +58,7 @@ function searchRecipesCallback(response){ //this is the callback function for th
 		////console.log(response.results[i].title);
 		recipesTitles.push(response.results[i].title);
 		recipeImg.push(response.results[i].image);
-		recipeID.push(response.results[i].id);	
+		recipeIDArray.push(response.results[i].id);	
 	}
 
 	if(response.results <1){
@@ -121,7 +125,7 @@ function appendTitleAndImages(){
 		imgTag.attr("data-recipe-title",recipesTitles[i]);
 		titleDiv.text(recipesTitles[i]);
 		imgContainer.append(imgDiv);
-		imgTag.attr("data-recipe-id",recipeID[i]);
+		imgTag.attr("data-recipe-id",recipeIDArray[i]);
 		imgDiv.append(imgTag);
 		$("#recipe-images").append(imgContainer);
 	}
@@ -275,7 +279,7 @@ function recipeIngredients(event){
 $("#recipe-images").on("click","img",function(event){
 
 	event.preventDefault();
-	var recipeID = $(this).attr("data-recipe-id");
+	recipeID = $(this).attr("data-recipe-id");
 	recipeTitle = $(this).attr("data-recipe-title");
 
 
@@ -291,8 +295,8 @@ $("#recipe-images").on("click","img",function(event){
     	//console.log(response); 	
     	
     	//Store the ingredients in array.
-    	var ingredientsList=[];
-    	var ingredientNames=[];
+    	ingredientsList=[];
+    	ingredientNames=[];
     	for(var i=0; i < response[0].extendedIngredients.length; i++){
 
     		ingredientsList.push(response[0].extendedIngredients[i].originalString);
@@ -317,7 +321,7 @@ $("#recipe-images").on("click","img",function(event){
     	}
 
     	//Add the recipe to the page.
-		var recipe = response[0].instructions;
+		recipe = response[0].instructions;
     	recipeDiv = $("<div>");
 		recipeDiv.html("<br><h3><strong>Recipe: </h3></strong><br><p>"+recipe+"</p>");
 		$("#ingredients").append(recipeDiv);   
@@ -327,7 +331,7 @@ $("#recipe-images").on("click","img",function(event){
 
 function createIngredientList(ingredientsList){
 	
-	$("#ingredients").html(recipeTitle);
+	$("#ingredients").html("<strong>"+recipeTitle+"</strong>");
 	for(var i=0; i < ingredientsList.length; i++){
 
 		ingredientDiv = $("<div>");
@@ -385,3 +389,23 @@ function addItemToCarousel(cNum, caption, url){
 
     $(id).children(".carousel-inner").append(item);
 }
+
+function favoriteRecipeToFirebase(){
+	database.ref().on("value", function(snapshot) {
+	if (!snapshot.hasChild(recipeID)) {
+    database.ref(recipeID).push({
+		recipeTitle :recipeTitle,
+		ingredientsList :ingredientsList,
+		recipe: recipe,
+		recipeID:recipeID,
+
+	});
+	};
+});
+};
+
+$("#ingredients").on("click",function(){
+	favoriteRecipeToFirebase();
+	console.log("added to firebase");
+
+});
