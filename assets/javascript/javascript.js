@@ -73,13 +73,13 @@ function submitSearch(event){ //this is the function for the submit button on th
 	var selectedRadioButton;
 
 	//both the cuisine filter and checkboxes are populated
-	if(!cuisine == "" && $('input[name=type]:checked').length > 0){
+	if(cuisine !== "none" && $('input[name=type]:checked').length > 0){
 		selectedRadioButton = $('input[name=type]:checked').val();
 		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ selectedRadioButton;
 		//console.log(searchQueryURL);
 	}
 	// if just the cuisine filter is filled out 
-	else if(!cuisine == ""){
+	else if(cuisine !== "none"){
 		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine;
 		//console.log(searchQueryURL);
 	}
