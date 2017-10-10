@@ -294,7 +294,7 @@ function addItemToCarousel(cNum, caption, url, price){
 
 	var item = $("<div class='item "+active+"'></div>");
 	item.css("data-price", price);
-	item.append("<span>$"+price+"</span>");
+	item.append("<span class='price'>$"+price+"</span>");
     item.append("<img class='carousel-image' src='"+url+"' alt=''>");
     var divCap = $("<div class='c-caption'></div>");
     divCap.append("<h2><strong>"+caption+"</strong></h2>");
@@ -426,5 +426,25 @@ $("#favorited-list").on("click","img",function(event){
 		$("#ingredients").append(recipeDiv);   
 		$("#favorited-panel").addClass("hidden");
     });
-})
+});
 
+$("#ingredients").on("click","img",function(event){
+
+	var shopImg = $(this).clone();
+	shopImg.removeClass();
+	shopImg.css("margin", "10px");
+	var divTag = $(this).parent();
+	var priceTag = divTag.children(".price").clone();
+	var captionTag = divTag.children(".c-caption").clone();
+	captionTag.css({width: "120px", margin: "10px"});
+	var newDiv = $("<div>");
+    newDiv.css("float", "left");
+	newDiv.append(priceTag);
+	newDiv.append(captionTag);
+	newDiv.append(shopImg);
+
+	$("#shopping-cart").append(newDiv);
+
+	$("#shopping-panel").removeClass("hidden");
+
+});
