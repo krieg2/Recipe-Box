@@ -53,3 +53,10 @@ ol.carousel-indicators {
 #star {
 	margin: 10px;
 }
+
+.thumbnail {
+	width: 150px;
+	height: 220px;
+	float: left;
+	overflow: scroll;
+}

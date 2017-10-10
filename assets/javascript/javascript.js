@@ -433,25 +433,28 @@ $("#ingredients").on("click","img",function(event){
 
 	var shopImg = $(this).clone();
 	shopImg.removeClass();
-	shopImg.css("margin", "10px");
-	var divTag = $(this).parent();
-	var priceTag = divTag.children(".price").clone();
-	var captionTag = divTag.children(".c-caption").clone();
-	captionTag.css({width: "120px", margin: "10px"});
-	var newDiv = $("<div>");
-    newDiv.css("float", "left");
-	newDiv.append(priceTag);
-	newDiv.append(captionTag);
-	newDiv.append(shopImg);
 
-	var priceText = priceTag.text();
-	priceText = priceText.replace("$", "");
-	var priceNum = parseFloat(priceText);
+	var parent = $(this).parent();
+	var price = parent.children(".price").text();
+	var caption = parent.children(".c-caption").text();
+	var innerDiv = $("<div>");
+    innerDiv.addClass("caption");
+	innerDiv.append("<h4>"+price+"</h4>");
+	innerDiv.append("<p>"+caption+"</p>");
+
+	var cardDiv = $("<div>");
+	cardDiv.addClass("thumbnail");
+	cardDiv.css({width: "120px", float: "left"});
+	cardDiv.append(shopImg);
+	cardDiv.append(innerDiv);
+
+	price = price.replace("$", "");
+	var priceNum = parseFloat(price);
 	cartTotal += priceNum;
 
 	$("#cart-total").text("$"+cartTotal.toFixed(2));
 
-	$("#shopping-cart").append(newDiv);
+	$("#shopping-cart").append(cardDiv);
 
 	$("#shopping-panel").removeClass("hidden");
 
