@@ -24,6 +24,7 @@ var ingredientNames=[];
 var recipe;
 var recipeID;
 var currentImgURL;
+var cartTotal = 0;
 var divLength = ($("#favorited-list").length);
 
 
@@ -442,6 +443,13 @@ $("#ingredients").on("click","img",function(event){
 	newDiv.append(priceTag);
 	newDiv.append(captionTag);
 	newDiv.append(shopImg);
+
+	var priceText = priceTag.text();
+	priceText = priceText.replace("$", "");
+	var priceNum = parseFloat(priceText);
+	cartTotal += priceNum;
+
+	$("#cart-total").text("$"+cartTotal.toFixed(2));
 
 	$("#shopping-cart").append(newDiv);
 
