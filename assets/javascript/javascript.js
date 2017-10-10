@@ -24,6 +24,7 @@ var ingredientNames=[];
 var recipe;
 var recipeID;
 var currentImgURL;
+var divLength = ($("#favorited-list").length);
 
 
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
@@ -425,7 +426,8 @@ $("#favorited").on("click", function(event) {
     event.preventDefault();
 
     database.ref().on("value", function(snapshot) {
-
+    	var snapShotLength = snapshot.numChildren();
+    	if(snapShotLength> divLength){
 
         snapshot.forEach(function(child) {
             child.forEach(function(grandchild) {
@@ -452,10 +454,14 @@ $("#favorited").on("click", function(event) {
             });
 
         });
-
-    });
-
+		
+    };
+    divLength +=snapShotLength;
+    
+	});
     $("#favorited-panel").removeClass("hidden");
+
+    
 });
 
 $("#favorited-list").on("click","img",function(event){
