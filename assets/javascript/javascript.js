@@ -15,10 +15,14 @@ var searchURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/reci
 var apiKey = "rnhXAWLOK1mshe92gRq8upcR4GQap1kYjhnjsnG92yzGgZRARJ";
 var recipesTitles = [];
 var recipeImg=[];
-var recipeID=[];
+var recipeIDArray=[];
 var baseURI;
 var timerId;
 var recipeTitle;
+var ingredientsList=[];
+var ingredientNames=[];
+var recipe;
+var recipeID;
 
 
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
@@ -40,18 +44,26 @@ function searchRecipesCallback(response){ //this is the callback function for th
 		response
 	})
 
+	console.log(response);
 	baseURI = response.baseUri;
 	recipesTitles = [];
 	recipeImg=[];
-	recipeID=[];
+	recipeIDArray=[];
 
 	// going to get the title from each result and console log it 
+
+
 
 	for(i=0; i<response.results.length; i++){
 		////console.log(response.results[i].title);
 		recipesTitles.push(response.results[i].title);
 		recipeImg.push(response.results[i].image);
-		recipeID.push(response.results[i].id);	
+		recipeIDArray.push(response.results[i].id);	
+	}
+
+	if(response.results <1){
+		$("#recipe-images").html("No results found.");
+		$("#recipe-panel").removeClass("hidden");
 	}
 	appendTitleAndImages();
 	
@@ -73,13 +85,13 @@ function submitSearch(event){ //this is the function for the submit button on th
 	var selectedRadioButton;
 
 	//both the cuisine filter and checkboxes are populated
-	if(!cuisine == "" && $('input[name=type]:checked').length > 0){
+	if(cuisine !== "none" && $('input[name=type]:checked').length > 0){
 		selectedRadioButton = $('input[name=type]:checked').val();
 		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ selectedRadioButton;
 		//console.log(searchQueryURL);
 	}
 	// if just the cuisine filter is filled out 
-	else if(!cuisine == ""){
+	else if(cuisine !== "none"){
 		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine;
 		//console.log(searchQueryURL);
 	}
@@ -113,7 +125,7 @@ function appendTitleAndImages(){
 		imgTag.attr("data-recipe-title",recipesTitles[i]);
 		titleDiv.text(recipesTitles[i]);
 		imgContainer.append(imgDiv);
-		imgTag.attr("data-recipe-id",recipeID[i]);
+		imgTag.attr("data-recipe-id",recipeIDArray[i]);
 		imgDiv.append(imgTag);
 		$("#recipe-images").append(imgContainer);
 	}
@@ -121,7 +133,15 @@ function appendTitleAndImages(){
 	$("#recipe-panel").removeClass("hidden");
 }
 
+function ingredientBackButton(){
+	$("#recipe-panel").removeClass("hidden");
+	$("#ingredient-panel").addClass("hidden");
+	$("#ingredients").empty();
+
+}
+
 $("#submit").on("click", submitSearch);
+$("#ingredient-back-button").on("click", ingredientBackButton);
 
 // Walmart API search. Note: this search does not work well. Try using UPC lookup instead.
 function productSearch(ingredient, ingredientNum){
@@ -259,7 +279,7 @@ function recipeIngredients(event){
 $("#recipe-images").on("click","img",function(event){
 
 	event.preventDefault();
-	var recipeID = $(this).attr("data-recipe-id");
+	recipeID = $(this).attr("data-recipe-id");
 	recipeTitle = $(this).attr("data-recipe-title");
 
 
@@ -276,8 +296,8 @@ $("#recipe-images").on("click","img",function(event){
     	console.log(response); 	
     	
     	//Store the ingredients in array.
-    	var ingredientsList=[];
-    	var ingredientNames=[];
+    	ingredientsList=[];
+    	ingredientNames=[];
     	for(var i=0; i < response[0].extendedIngredients.length; i++){
 
     		ingredientsList.push(response[0].extendedIngredients[i].originalString);
@@ -302,7 +322,7 @@ $("#recipe-images").on("click","img",function(event){
     	}
 
     	//Add the recipe to the page.
-		var recipe = response[0].instructions;
+		recipe = response[0].instructions;
     	recipeDiv = $("<div>");
 		recipeDiv.html("<br><h3><strong>Recipe: </h3></strong><br><p>"+recipe+"</p>");
 		$("#ingredients").append(recipeDiv);   
@@ -372,6 +392,26 @@ function addItemToCarousel(cNum, caption, url, price){
 
     $(id).children(".carousel-inner").append(item);
 }
+
+function favoriteRecipeToFirebase(){
+	database.ref().on("value", function(snapshot) {
+	if (!snapshot.hasChild(recipeID)) {
+    database.ref(recipeID).push({
+		recipeTitle :recipeTitle,
+		ingredientsList :ingredientsList,
+		recipe: recipe,
+		recipeID:recipeID,
+
+	});
+	};
+});
+};
+
+$("#ingredients").on("click",function(){
+	favoriteRecipeToFirebase();
+	console.log("added to firebase");
+
+});
 
 $("#star").on("click", function(event){
 
