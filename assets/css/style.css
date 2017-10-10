@@ -37,6 +37,10 @@ ol.carousel-indicators {
   width: auto;
 }
 
+.required{
+	color: red;
+}
+
 .back-button{
 	float: right;
 }
