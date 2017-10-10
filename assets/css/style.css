@@ -19,7 +19,7 @@
 
 .carousel{
 	width: 200px;
-	height: 150px;
+	height: 180px;
 	float: right;
 	text-align: center;
 	overflow: hidden;
@@ -39,6 +39,6 @@ ol.carousel-indicators {
   width: auto;
 }
 
-.fa-star-o {
+#star {
 	margin: 10px;
 }
