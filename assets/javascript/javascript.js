@@ -140,11 +140,8 @@ function ingredientBackButton(){
 $("#submit").on("click", submitSearch);
 $("#ingredient-back-button").on("click", ingredientBackButton);
 
-// Walmart API search. Note: this search does not work well. Try using UPC lookup instead.
+// Walmart API search. Note: this search does not always work well.
 function productSearch(ingredient, ingredientNum){
-
-	//event.preventDefault();
-	//var searchQueryParameter = $("#").val().trim();
 
 	var searchQueryURL = "https://cors-anywhere.herokuapp.com/" + 
 	                     "http://api.walmartlabs.com/v1/search?" +
@@ -170,89 +167,6 @@ function productSearch(ingredient, ingredientNum){
 
 		   addItemToCarousel(ingredientNum, name, imgUrl, price);
 		}
-    });
-}
-
-// Walmart API lookup by UPC.
-function productLookup(upc, ingredientNum){
-                         
-	var searchQueryURL = "https://cors-anywhere.herokuapp.com/" + 
-	                     "http://api.walmartlabs.com/v1/items?apiKey=" +
-	                     "z5m92qf29tv7u76f4vaztra4" +
-	                     "&upc=" + upc;
-
-      /*dataType: "json",
-      indexValue: {upc: upc, ingredientNum: ingredientNum},
-      jsonpCallback: "productLookupCallback",
-      headers: {	
-       	"Content-Type": "application/jsonp",
-       	"X-Requested-With": "XMLHttpRequest"
-	  }*/
-
-	$.ajax({
-      url: searchQueryURL,
-      method: "GET",
-      headers: {	
-       	"X-Requested-With": "XMLHttpRequest"
-	  }
-    }).done(function(response){
-
-        //console.log("UPC response "+upc);
-    	//console.log(response);
-
-        if(typeof(response.items) !== 'undefined'){
-        	//if(typeof(response.items[0].salePrice) !== 'undefined'){
-
-		    	//var price = response.items[0].salePrice;
-		    	var name = response.items[0].name;
-		    	var imgUrl = response.items[0].thumbnailImage;
-
-		    	addItemToCarousel(ingredientNum, name, imgUrl);
-	    	//}
-    	}
-
-    });
-}
-
-// Get products and UPC codes for each ingredient.
-function ingredientsToProduct(ingredientNames){
-
-    $.ajax({
-      url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/ingredients/map",
-      method: "POST",
-      headers: {	
-      	"X-Mashape-Key": apiKey,
-      	"Content-Type": "application/json",
-		"Accept": "application/json"
-		},
-	  data: JSON.stringify({
-	  	"ingredients": ingredientNames,
-	  	"servings": 1
-	  }),
-	  processData: false,
-	  dataType: "json"
-    }).done(function(response) {
-
-        //console.log("ingredients to product results");
-    	//console.log(response);
-    	var limit = 5;
-    	var delay = 0;
-    	for(var i=0; i<response.length; i++){
-    		var n = response[i].products.length;
-
-    		for(var j=0; j<n && j<limit; j++){
-    			if(typeof(response[i].products[j]) !== 'undefined'){
-
-	    			var upc = response[i].products[j].upc;
-
-	    			delay += 500;
-
-	    			timerId = setTimeout(productLookup, delay, upc, i);
-    			}
-    		}
-    		$("#ingredient_"+i).append(createCarousel(i));
-    	}
-
     });
 }
 
@@ -306,8 +220,6 @@ $("#recipe-images").on("click","img",function(event){
     	//Add the ingredients to the page.
     	createIngredientList(ingredientsList);
 
-    	//Lookup the UPCs for each ingredient.
-    	//ingredientsToProduct(ingredientNames);
     	var limit = 5;
     	var delay = 0;
     	for(var i=0; i<ingredientNames.length; i++){
@@ -369,8 +281,6 @@ function createCarousel(i){
  }
 
 function addItemToCarousel(cNum, caption, url, price){
-
-	//console.log("Adding " + caption + "to carousel #" + cNum);
 
 	var id = "#carousel_" + cNum;
 	var listIndex = $(id).children(".carousel-indicators").children().length;
@@ -491,8 +401,6 @@ $("#favorited-list").on("click","img",function(event){
     	//Add the ingredients to the page.
     	createIngredientList(ingredientsList);
 
-    	//Lookup the UPCs for each ingredient.
-    	//ingredientsToProduct(ingredientNames);
     	var limit = 5;
     	var delay = 0;
     	for(var i=0; i<ingredientNames.length; i++){
