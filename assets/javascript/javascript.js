@@ -23,6 +23,7 @@ var ingredientsList=[];
 var ingredientNames=[];
 var recipe;
 var recipeID;
+var currentImgURL;
 
 
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
@@ -85,13 +86,13 @@ function submitSearch(event){ //this is the function for the submit button on th
 	var selectedRadioButton;
 
 	//both the cuisine filter and checkboxes are populated
-	if(cuisine !== "none" && $('input[name=type]:checked').length > 0){
+	if(!cuisine == "" && $('input[name=type]:checked').length > 0){
 		selectedRadioButton = $('input[name=type]:checked').val();
 		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ selectedRadioButton;
 		//console.log(searchQueryURL);
 	}
 	// if just the cuisine filter is filled out 
-	else if(cuisine !== "none"){
+	else if(!cuisine == ""){
 		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine;
 		//console.log(searchQueryURL);
 	}
@@ -281,6 +282,8 @@ $("#recipe-images").on("click","img",function(event){
 	event.preventDefault();
 	recipeID = $(this).attr("data-recipe-id");
 	recipeTitle = $(this).attr("data-recipe-title");
+	currentImgURL = $(this).attr('src');
+
 
 
 	$.ajax({
@@ -398,6 +401,7 @@ function favoriteRecipeToFirebase(){
 		ingredientsList :ingredientsList,
 		recipe: recipe,
 		recipeID:recipeID,
+		imgURL: currentImgURL
 
 	});
 	};
