@@ -133,14 +133,30 @@ function appendTitleAndImages(){
 }
 
 function ingredientBackButton(){
+
 	$("#recipe-panel").removeClass("hidden");
 	$("#ingredient-panel").addClass("hidden");
 	$("#ingredients").empty();
 
 }
 
+function cartHideButton(){
+
+    if($("#cart-hide-button").text().trim() === "Hide"){
+		$("#cart-hide-button").text(" Show ");
+		$("#shopping-cart").hide();
+	} else{
+		$("#cart-hide-button").text(" Hide ");
+		$("#shopping-cart").show();
+	}
+
+}
+
 $("#submit").on("click", submitSearch);
+
 $("#ingredient-back-button").on("click", ingredientBackButton);
+
+$("#cart-hide-button").on("click", cartHideButton);
 
 // Walmart API search. Note: this search does not always work well.
 function productSearch(ingredient, ingredientNum){
@@ -444,7 +460,7 @@ $("#ingredients").on("click","img",function(event){
 
 	var cardDiv = $("<div>");
 	cardDiv.addClass("thumbnail");
-	cardDiv.css({width: "120px", float: "left"});
+	cardDiv.css({});
 	cardDiv.append(shopImg);
 	cardDiv.append(innerDiv);
 
