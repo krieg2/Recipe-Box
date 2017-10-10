@@ -13,7 +13,6 @@
 }
 
 .image-title {
-	height 20px;
 	width: auto;
 }
 
@@ -40,4 +39,12 @@ ol.carousel-indicators {
 
 .required{
 	color: red;
+}
+
+.back-button{
+	float: right;
+}
+
+.ingredients-title{
+	margin-bottom: 15px;
 }
