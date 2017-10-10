@@ -11,7 +11,7 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-var searchURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="
+var searchURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?&number=100&query="
 var apiKey = "rnhXAWLOK1mshe92gRq8upcR4GQap1kYjhnjsnG92yzGgZRARJ";
 var recipesTitles = [];
 var recipeImg=[];
@@ -82,24 +82,25 @@ function submitSearch(event){ //this is the function for the submit button on th
 	
 	var SearchQueryParameter = $("#ingredient-text").val().trim();
 	var cuisine = $("#cuisine-text").val().trim();
-	var searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query=" + SearchQueryParameter; 
+	var searchQueryURL = searchURL + SearchQueryParameter; 
 	var selectedRadioButton;
 
 	//both the cuisine filter and checkboxes are populated
 	if(!cuisine == "" && $('input[name=type]:checked').length > 0){
 		selectedRadioButton = $('input[name=type]:checked').val();
-		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ selectedRadioButton;
+		searchQueryURL = searchURL+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ selectedRadioButton;
 		//console.log(searchQueryURL);
 	}
 	// if just the cuisine filter is filled out 
-	else if(!cuisine == ""){
-		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine;
+	else if(cuisine !== "none"){
+		searchQueryURL = searchURL + SearchQueryParameter +"&cuisine=" + cuisine;
+
 		//console.log(searchQueryURL);
 	}
 	// if just the checkbox filter is selected 
 	else if($('input[name=type]:checked').length > 0){
 		selectedRadioButton = $('input[name=type]:checked').val();
-		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&type=" + selectedRadioButton;
+		searchQueryURL = searchURL + SearchQueryParameter +"&type=" + selectedRadioButton;
 		//console.log(searchQueryURL);
 	}
 
