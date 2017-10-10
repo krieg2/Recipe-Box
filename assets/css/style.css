@@ -18,9 +18,10 @@
 
 .carousel{
 	width: 200px;
-	height: 150px;
+	height: 180px;
 	float: right;
 	text-align: center;
+	overflow: hidden;
 }
 
 .carousel-image {
@@ -47,4 +48,8 @@ ol.carousel-indicators {
 
 .ingredients-title{
 	margin-bottom: 15px;
+}
+
+#star {
+	margin: 10px;
 }

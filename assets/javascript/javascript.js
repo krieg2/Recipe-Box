@@ -172,7 +172,7 @@ function productSearch(ingredient, ingredientNum){
 		   var imgUrl = response.items[i].thumbnailImage;
 		   var price = response.items[i].salePrice;
 
-		   addItemToCarousel(ingredientNum, name, imgUrl);
+		   addItemToCarousel(ingredientNum, name, imgUrl, price);
 		}
     });
 }
@@ -295,7 +295,8 @@ $("#recipe-images").on("click","img",function(event){
 		}
     }).done(function(response) {
 
-    	//console.log(response); 	
+        console.log("recipe response");
+    	console.log(response); 	
     	
     	//Store the ingredients in array.
     	ingredientsList=[];
@@ -334,14 +335,15 @@ $("#recipe-images").on("click","img",function(event){
 
 function createIngredientList(ingredientsList){
 	
-	$("#ingredients").html("<strong>"+recipeTitle+"</strong>");
+	$("#ingredients").append("<h2>"+recipeTitle+"</h2><br>");
+
 	for(var i=0; i < ingredientsList.length; i++){
 
 		ingredientDiv = $("<div>");
 		ingredientDiv.html(ingredientsList[i]);
 		ingredientDiv.attr("id", "ingredient_"+i);
 
-		ingredientDiv.css("min-height", "160px");
+		ingredientDiv.css("min-height", "200px");
 		$("#ingredients").append(ingredientDiv);
 	}
 	$("#recipe-panel").addClass("hidden");
@@ -370,7 +372,7 @@ function createCarousel(i){
 	return outerDiv;
  }
 
-function addItemToCarousel(cNum, caption, url){
+function addItemToCarousel(cNum, caption, url, price){
 
 	//console.log("Adding " + caption + "to carousel #" + cNum);
 
@@ -383,8 +385,9 @@ function addItemToCarousel(cNum, caption, url){
 	$(id).children(".carousel-indicators").append("<li data-target='" + id +
 	            "' data-slide-to='"+listIndex+"' class='"+active+"'></li>");
 
-
 	var item = $("<div class='item "+active+"'></div>");
+	item.css("data-price", price);
+	item.append("<span>$"+price+"</span>");
     item.append("<img class='carousel-image' src='"+url+"' alt=''>");
     var divCap = $("<div class='c-caption'></div>");
     divCap.append("<h2><strong>"+caption+"</strong></h2>");
@@ -411,5 +414,13 @@ function favoriteRecipeToFirebase(){
 $("#ingredients").on("click",function(){
 	favoriteRecipeToFirebase();
 	console.log("added to firebase");
+
+});
+
+$("#star").on("click", function(event){
+
+	$(this).css({color: "yellow"});
+	$(this).removeClass();
+	$(this).addClass("fa fa-star");
 
 });
