@@ -41,11 +41,7 @@ function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes
 function searchRecipesCallback(response){ //this is the callback function for the ajax search recipes 
 	// put stuff to firebase
 	// TODO - we should delete the object from the previous search and put in the new one. 
-	database.ref("search").set({
-		response
-	})
 
-	console.log(response);
 	baseURI = response.baseUri;
 	recipesTitles = [];
 	recipeImg=[];
@@ -418,9 +414,103 @@ $("#ingredients").on("click",function(){
 });
 
 $("#star").on("click", function(event){
-
+	favoriteRecipeToFirebase();
 	$(this).css({color: "yellow"});
 	$(this).removeClass();
 	$(this).addClass("fa fa-star");
 
 });
+
+$("#favorited").on("click", function(event) {
+    event.preventDefault();
+
+    database.ref().on("value", function(snapshot) {
+
+
+        snapshot.forEach(function(child) {
+            child.forEach(function(grandchild) {
+                var key = grandchild.val();
+                var imgContainer = $('<div>');
+                var imgDiv = $('<div>');
+                var titleDiv = $('<div>');
+                var imgTag = $('<img>');
+                imgContainer.addClass("image-container");
+                imgTag.attr("src", key.imgURL);
+                imgTag.attr("width", 200);
+                imgTag.addClass("img-fluid");
+                imgDiv.append(imgTag);
+                imgDiv.addClass("image-div");
+                imgContainer.append(titleDiv);
+                titleDiv.addClass("image-title");
+                imgTag.attr("data-recipe-title", key.recipeTitle);
+                titleDiv.text(key.recipeTitle);
+                imgContainer.append(imgDiv);
+                imgTag.attr("data-recipe-id", key.recipeID);
+                imgDiv.append(imgTag);
+                $("#favorited-list").append(imgContainer);
+
+            });
+
+        });
+
+    });
+
+    $("#favorited-panel").removeClass("hidden");
+});
+
+$("#favorited-list").on("click","img",function(event){
+
+	event.preventDefault();
+	recipeID = $(this).attr("data-recipe-id");
+	recipeTitle = $(this).attr("data-recipe-title");
+	currentImgURL = $(this).attr('src');
+
+
+
+	$.ajax({
+      url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk?ids="+recipeID+"&includeNutrition=false",
+      method: "GET",
+      headers: {	
+      	"X-Mashape-Key": apiKey,
+      	"Content-Type": "application/json",
+		}
+    }).done(function(response) {
+
+        console.log("recipe response");
+    	console.log(response); 	
+    	
+    	//Store the ingredients in array.
+    	ingredientsList=[];
+    	ingredientNames=[];
+    	for(var i=0; i < response[0].extendedIngredients.length; i++){
+
+    		ingredientsList.push(response[0].extendedIngredients[i].originalString);
+    		ingredientNames.push(response[0].extendedIngredients[i].name);
+    	}
+
+    	//Add the ingredients to the page.
+    	createIngredientList(ingredientsList);
+
+    	//Lookup the UPCs for each ingredient.
+    	//ingredientsToProduct(ingredientNames);
+    	var limit = 5;
+    	var delay = 0;
+    	for(var i=0; i<ingredientNames.length; i++){
+ 
+			var name = ingredientNames[i];
+
+			delay += 500;
+
+			timerId = setTimeout(productSearch, delay, name, i);
+    		$("#ingredient_"+i).append(createCarousel(i));
+    	}
+
+    	//Add the recipe to the page.
+		recipe = response[0].instructions;
+    	recipeDiv = $("<div>");
+		recipeDiv.html("<br><h3><strong>Recipe: </h3></strong><br><p>"+recipe+"</p>");
+		$("#ingredients").append(recipeDiv);   
+		$("#favorited-panel").addClass("hidden");
+    });
+})
+

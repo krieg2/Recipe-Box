@@ -76,6 +76,7 @@
                             <!-- Here we have our final submit button -->
                             <br>
                             <button type="submit" class="btn btn-default" id="submit"><i class="fa fa-search"></i> Submit</button>
+                            <button type="submit" class="btn btn-default" id="favorited"><i class="fa fa-search"></i> Favorited Recipes</button>
                         </form>
                     </div>
                 </div>
@@ -110,6 +111,20 @@
                             <i id="star" class="fa fa-star-o" aria-hidden="true">  Favorite</i>
                         </div>
                         <div class="panel-body" id="ingredients">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row hidden" id="favorited-panel">
+            <div class="col-sm-12 col-md-12">
+                <br>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong><i class="fa fa-shopping-cart"></i>   Favorited Recipes</strong></h3>
+                        <div class="panel-body">
+                            <div class="row" id="favorited-list">
+                            </div>
                         </div>
                     </div>
                 </div>
