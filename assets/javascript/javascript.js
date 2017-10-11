@@ -24,6 +24,7 @@ var ingredientNames=[];
 var recipe;
 var recipeID;
 var currentImgURL;
+var divsForPagination =[];
 
 
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
@@ -67,6 +68,15 @@ function searchRecipesCallback(response){ //this is the callback function for th
 		$("#recipe-panel").removeClass("hidden");
 	}
 	appendTitleAndImages();
+
+	$('#pagination-container').pagination({
+    dataSource: divsForPagination,
+    callback: function(data, pagination) {
+        // template method of yourself
+        var html = dataSource;
+        $("#data-container").html(html);
+    }
+})
 	
 }
 
@@ -104,7 +114,6 @@ function submitSearch(event){ //this is the function for the submit button on th
 		//console.log(searchQueryURL);
 	}
 
-	// if no filters are selected 
 	ajax(searchQueryURL, apiKey, searchRecipesCallback);
 	console.log("searched");
 
@@ -129,11 +138,16 @@ function appendTitleAndImages(){
 		imgContainer.append(imgDiv);
 		imgTag.attr("data-recipe-id",recipeIDArray[i]);
 		imgDiv.append(imgTag);
-		$("#recipe-images").append(imgContainer);
+		//$("#recipe-images").append(imgContainer);
+
+		divsForPagination.push(imgContainer);
+
 	}
 	
 	$("#recipe-panel").removeClass("hidden");
 }
+
+
 
 function ingredientBackButton(){
 	$("#recipe-panel").removeClass("hidden");
@@ -142,6 +156,7 @@ function ingredientBackButton(){
 
 }
 
+// on click for submit and ingredients 
 $("#submit").on("click", submitSearch);
 $("#ingredient-back-button").on("click", ingredientBackButton);
 
