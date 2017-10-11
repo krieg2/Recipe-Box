@@ -28,6 +28,35 @@ var cartTotal = 0;
 var divLength = ($("#favorited-list").length);
 var favoritesList = [];
 
+database.ref().on("value", function(snapshot) {
+	$("#favorited-list").empty();
+        snapshot.forEach(function(child) {
+            child.forEach(function(grandchild) {
+                var key = grandchild.val();
+                var imgContainer = $('<div>');
+                var imgDiv = $('<div>');
+                var titleDiv = $('<div>');
+                var imgTag = $('<img>');
+                imgContainer.addClass("image-container");
+                imgTag.attr("src", key.imgURL);
+                imgTag.attr("width", 200);
+                imgTag.addClass("img-fluid");
+                imgDiv.append(imgTag);
+                imgDiv.addClass("image-div");
+                imgContainer.append(titleDiv);
+                titleDiv.addClass("image-title");
+                imgTag.attr("data-recipe-title", key.recipeTitle);
+                titleDiv.text(key.recipeTitle);
+                imgContainer.append(imgDiv);
+                imgTag.attr("data-recipe-id", key.recipeID);
+                imgDiv.append(imgTag);
+                $("#favorited-list").append(imgContainer);
+
+            });
+
+        });
+});
+
 
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
 
@@ -391,34 +420,7 @@ $("#favorited").on("click", function(event) {
 });
 
 
-database.ref().on("value", function(snapshot) {
-	$("#favorited-list").empty();
-        snapshot.forEach(function(child) {
-            child.forEach(function(grandchild) {
-                var key = grandchild.val();
-                var imgContainer = $('<div>');
-                var imgDiv = $('<div>');
-                var titleDiv = $('<div>');
-                var imgTag = $('<img>');
-                imgContainer.addClass("image-container");
-                imgTag.attr("src", key.imgURL);
-                imgTag.attr("width", 200);
-                imgTag.addClass("img-fluid");
-                imgDiv.append(imgTag);
-                imgDiv.addClass("image-div");
-                imgContainer.append(titleDiv);
-                titleDiv.addClass("image-title");
-                imgTag.attr("data-recipe-title", key.recipeTitle);
-                titleDiv.text(key.recipeTitle);
-                imgContainer.append(imgDiv);
-                imgTag.attr("data-recipe-id", key.recipeID);
-                imgDiv.append(imgTag);
-                $("#favorited-list").append(imgContainer);
 
-            });
-
-        });
-});
     
 
     
