@@ -296,7 +296,7 @@ function createIngredientList(ingredientsList){
 function createCarousel(i){
 
     var id = "carousel_" + i;
-	var outerDiv = $("<div class='carousel slide' data-ride='carousel'>")
+	var outerDiv = $("<div class='carousel slide' data-ride='carousel' data-interval='false'>")
     outerDiv.attr("id", id);
 
     var oList = $("<ol class='carousel-indicators'>");
