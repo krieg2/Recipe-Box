@@ -260,10 +260,7 @@ $("#recipe-images").on("click","img",function(event){
     		recipe = "";
     	}
 		recipeDiv.html("<br><h3><strong>Recipe: </h3></strong><br><p>"+recipe+"</p>");
-		//var found = $("#favorited-list").find("img[data-recipe-id='840513']").length;
-		//console.log(found);
-		$("#ingredients").append(recipeDiv);   
-		
+		$("#ingredients").append(recipeDiv);		
     });
 })
 
@@ -370,6 +367,12 @@ $("#star").on("click", function(event){
 		$(this).addClass("fa fa-star");
 	} else{
 		removeFromFirebase(recipeID);
+
+		var found = $("#favorited-list").find("img[data-recipe-id='"+recipeID+"']").length;
+		if(found){
+			$("#favorited-list").find("img[data-recipe-id='"+recipeID+"']").parent().parent().remove();
+		}
+
 		var idx = favoritesList.indexOf(recipeID);
 		favoritesList = favoritesList.filter(function(element, index) { return index !== idx});
 		$(this).css({color: "white"});
