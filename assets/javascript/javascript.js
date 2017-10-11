@@ -271,12 +271,14 @@ function createIngredientList(ingredientsList){
 	for(var i=0; i < ingredientsList.length; i++){
 
 		ingredientDiv = $("<div>");
-		ingredientDiv.html(ingredientsList[i]);
+		ingredientDiv.append("<i class='fa fa-circle-o' aria-hidden='true'></i>");
+		ingredientDiv.append(ingredientsList[i]);
 		ingredientDiv.attr("id", "ingredient_"+i);
 
 		ingredientDiv.css("min-height", "200px");
 		$("#ingredients").append(ingredientDiv);
 	}
+
 	if(favoritesList.indexOf(recipeID) < 0) {
 		$("#star").css({color: "white"});
 		$("#star").removeClass();
