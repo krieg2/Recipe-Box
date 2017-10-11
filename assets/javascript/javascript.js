@@ -529,6 +529,9 @@ $("#shopping-cart").on("click", "i", function(event){
 	price = price.replace("$", "");
 	var priceNum = parseFloat(price);
 	cartTotal -= priceNum;
+	if(cartTotal <= 0.0){
+		cartTotal = 0.0;
+	}
 
 	$("#cart-total").text("$"+cartTotal.toFixed(2));
 
