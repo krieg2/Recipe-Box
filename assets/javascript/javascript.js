@@ -299,13 +299,15 @@ function createIngredientList(ingredientsList){
 
 	for(var i=0; i < ingredientsList.length; i++){
 
-		ingredientDiv = $("<div>");
-		ingredientDiv.html(ingredientsList[i]);
+		ingredientDiv = $("<div class='well'>");
+		ingredientDiv.append("<i class='fa fa-circle-o' aria-hidden='true'></i>");
+		ingredientDiv.append(ingredientsList[i]);
 		ingredientDiv.attr("id", "ingredient_"+i);
 
 		ingredientDiv.css("min-height", "200px");
 		$("#ingredients").append(ingredientDiv);
 	}
+
 	if(favoritesList.indexOf(recipeID) < 0) {
 		$("#star").css({color: "white"});
 		$("#star").removeClass();
@@ -528,6 +530,9 @@ $("#shopping-cart").on("click", "i", function(event){
 	price = price.replace("$", "");
 	var priceNum = parseFloat(price);
 	cartTotal -= priceNum;
+	if(cartTotal <= 0.0){
+		cartTotal = 0.0;
+	}
 
 	$("#cart-total").text("$"+cartTotal.toFixed(2));
 

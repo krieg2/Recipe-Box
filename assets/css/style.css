@@ -77,3 +77,13 @@ ol.carousel-indicators {
 .fa-window-close-o:hover {
 	cursor:pointer;cursor:hand;
 }
+
+.fa-circle-o {
+	margin: 5px;
+	font-size: 10px;
+}
+
+.well {
+	background-color: #93aed2;
+	padding: 10px;
+}
