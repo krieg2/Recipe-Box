@@ -73,8 +73,19 @@ function searchRecipesCallback(response){ //this is the callback function for th
     dataSource: divsForPagination,
     callback: function(data, pagination) {
         // template method of yourself
-        var html = dataSource;
-        $("#data-container").html(html);
+
+        console.log(data);
+        $("#recipe-images").empty();
+        for(i=0; i<data.length;i++){
+        	var html = data[i].html();
+        	console.log(html);
+        	console.log(data[i]);
+        	var imgContainer = $("<div>");
+        	imgContainer.html(html);
+        	imgContainer.addClass("image-container");
+        	$("#recipe-images").append(imgContainer);
+
+        }
     }
 })
 	
