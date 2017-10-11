@@ -1,4 +1,4 @@
-
+	
 var config = {
 	apiKey: "AIzaSyCZV0Z65ENjbB4eYBkBxwa6fg6chRH3iec",
 	authDomain: "testproject-df5f0.firebaseapp.com",
@@ -24,7 +24,42 @@ var ingredientNames=[];
 var recipe;
 var recipeID;
 var currentImgURL;
+
 var divsForPagination =[];
+
+var cartTotal = 0;
+var divLength = ($("#favorited-list").length);
+var favoritesList = [];
+
+database.ref().on("value", function(snapshot) {
+	$("#favorited-list").empty();
+        snapshot.forEach(function(child) {
+            child.forEach(function(grandchild) {
+                var key = grandchild.val();
+                var imgContainer = $('<div>');
+                var imgDiv = $('<div>');
+                var titleDiv = $('<div>');
+                var imgTag = $('<img>');
+                imgContainer.addClass("image-container");
+                imgTag.attr("src", key.imgURL);
+                imgTag.attr("width", 200);
+                imgTag.addClass("img-fluid");
+                imgDiv.append(imgTag);
+                imgDiv.addClass("image-div");
+                imgContainer.append(titleDiv);
+                titleDiv.addClass("image-title");
+                imgTag.attr("data-recipe-title", key.recipeTitle);
+                titleDiv.text(key.recipeTitle);
+                imgContainer.append(imgDiv);
+                imgTag.attr("data-recipe-id", key.recipeID);
+                imgDiv.append(imgTag);
+                $("#favorited-list").append(imgContainer);
+
+            });
+
+        });
+});
+
 
 
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
@@ -42,11 +77,7 @@ function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes
 function searchRecipesCallback(response){ //this is the callback function for the ajax search recipes 
 	// put stuff to firebase
 	// TODO - we should delete the object from the previous search and put in the new one. 
-	database.ref("search").set({
-		response
-	})
 
-	console.log(response);
 	baseURI = response.baseUri;
 	recipesTitles = [];
 	recipeImg=[];
@@ -57,7 +88,7 @@ function searchRecipesCallback(response){ //this is the callback function for th
 
 
 	for(i=0; i<response.results.length; i++){
-		////console.log(response.results[i].title);
+		//console.log(response.results[i].title);
 		recipesTitles.push(response.results[i].title);
 		recipeImg.push(response.results[i].image);
 		recipeIDArray.push(response.results[i].id);	
@@ -98,7 +129,7 @@ function submitSearch(event){ //this is the function for the submit button on th
 	$("#recipe-images").empty();
 	$("#ingredients").empty();
 
-	console.log("emptied");
+	//console.log("emptied");
 	event.preventDefault();
 	
 	var SearchQueryParameter = $("#ingredient-text").val().trim();
@@ -126,7 +157,7 @@ function submitSearch(event){ //this is the function for the submit button on th
 	}
 
 	ajax(searchQueryURL, apiKey, searchRecipesCallback);
-	console.log("searched");
+	//console.log("searched");
 
 }
 
@@ -161,21 +192,36 @@ function appendTitleAndImages(){
 
 
 function ingredientBackButton(){
+
 	$("#recipe-panel").removeClass("hidden");
 	$("#ingredient-panel").addClass("hidden");
 	$("#ingredients").empty();
 
 }
 
+
 // on click for submit and ingredients 
+function cartHideButton(){
+
+    if($("#cart-hide-button").text().trim() === "Hide"){
+		$("#cart-hide-button").text(" Show ");
+		$("#shopping-cart").hide();
+	} else{
+		$("#cart-hide-button").text(" Hide ");
+		$("#shopping-cart").show();
+	}
+
+}
+
+
 $("#submit").on("click", submitSearch);
+
 $("#ingredient-back-button").on("click", ingredientBackButton);
 
-// Walmart API search. Note: this search does not work well. Try using UPC lookup instead.
-function productSearch(ingredient, ingredientNum){
+$("#cart-hide-button").on("click", cartHideButton);
 
-	//event.preventDefault();
-	//var searchQueryParameter = $("#").val().trim();
+// Walmart API search. Note: this search does not always work well.
+function productSearch(ingredient, ingredientNum){
 
 	var searchQueryURL = "https://cors-anywhere.herokuapp.com/" + 
 	                     "http://api.walmartlabs.com/v1/search?" +
@@ -191,99 +237,21 @@ function productSearch(ingredient, ingredientNum){
 	  }      
     }).done(function(response){
 
-    	console.log(response);
+    	//console.log(response);
 
-    	for(var i=0; i<response.items.length; i++){
+    	if(typeof response.items !== 'undefined'){
+	    	for(var i=0; i<response.items.length; i++){
 
-		   var name = response.items[i].name;
-		   var imgUrl = response.items[i].thumbnailImage;
-		   var price = response.items[i].salePrice;
+			   var name = response.items[i].name;
+			   var imgUrl = response.items[i].thumbnailImage;
+			   var price = response.items[i].salePrice;
+			   if(typeof price === 'undefined'){
+			       price = 0.0;
+			   }
 
-		   addItemToCarousel(ingredientNum, name, imgUrl, price);
+			   addItemToCarousel(ingredientNum, name, imgUrl, price);
+			}
 		}
-    });
-}
-
-// Walmart API lookup by UPC.
-function productLookup(upc, ingredientNum){
-                         
-	var searchQueryURL = "https://cors-anywhere.herokuapp.com/" + 
-	                     "http://api.walmartlabs.com/v1/items?apiKey=" +
-	                     "z5m92qf29tv7u76f4vaztra4" +
-	                     "&upc=" + upc;
-
-      /*dataType: "json",
-      indexValue: {upc: upc, ingredientNum: ingredientNum},
-      jsonpCallback: "productLookupCallback",
-      headers: {	
-       	"Content-Type": "application/jsonp",
-       	"X-Requested-With": "XMLHttpRequest"
-	  }*/
-
-	$.ajax({
-      url: searchQueryURL,
-      method: "GET",
-      headers: {	
-       	"X-Requested-With": "XMLHttpRequest"
-	  }
-    }).done(function(response){
-
-        //console.log("UPC response "+upc);
-    	//console.log(response);
-
-        if(typeof(response.items) !== 'undefined'){
-        	//if(typeof(response.items[0].salePrice) !== 'undefined'){
-
-		    	//var price = response.items[0].salePrice;
-		    	var name = response.items[0].name;
-		    	var imgUrl = response.items[0].thumbnailImage;
-
-		    	addItemToCarousel(ingredientNum, name, imgUrl);
-	    	//}
-    	}
-
-    });
-}
-
-// Get products and UPC codes for each ingredient.
-function ingredientsToProduct(ingredientNames){
-
-    $.ajax({
-      url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/ingredients/map",
-      method: "POST",
-      headers: {	
-      	"X-Mashape-Key": apiKey,
-      	"Content-Type": "application/json",
-		"Accept": "application/json"
-		},
-	  data: JSON.stringify({
-	  	"ingredients": ingredientNames,
-	  	"servings": 1
-	  }),
-	  processData: false,
-	  dataType: "json"
-    }).done(function(response) {
-
-        //console.log("ingredients to product results");
-    	//console.log(response);
-    	var limit = 5;
-    	var delay = 0;
-    	for(var i=0; i<response.length; i++){
-    		var n = response[i].products.length;
-
-    		for(var j=0; j<n && j<limit; j++){
-    			if(typeof(response[i].products[j]) !== 'undefined'){
-
-	    			var upc = response[i].products[j].upc;
-
-	    			delay += 500;
-
-	    			timerId = setTimeout(productLookup, delay, upc, i);
-    			}
-    		}
-    		$("#ingredient_"+i).append(createCarousel(i));
-    	}
-
     });
 }
 
@@ -311,8 +279,6 @@ $("#recipe-images").on("click","img",function(event){
 	recipeTitle = $(this).attr("data-recipe-title");
 	currentImgURL = $(this).attr('src');
 
-
-
 	$.ajax({
       url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk?ids="+recipeID+"&includeNutrition=false",
       method: "GET",
@@ -322,8 +288,8 @@ $("#recipe-images").on("click","img",function(event){
 		}
     }).done(function(response) {
 
-        console.log("recipe response");
-    	console.log(response); 	
+        //console.log("recipe response");
+    	//console.log(response); 	
     	
     	//Store the ingredients in array.
     	ingredientsList=[];
@@ -335,10 +301,9 @@ $("#recipe-images").on("click","img",function(event){
     	}
 
     	//Add the ingredients to the page.
+    	$("#ingredients").empty();
     	createIngredientList(ingredientsList);
 
-    	//Lookup the UPCs for each ingredient.
-    	//ingredientsToProduct(ingredientNames);
     	var limit = 5;
     	var delay = 0;
     	for(var i=0; i<ingredientNames.length; i++){
@@ -353,10 +318,13 @@ $("#recipe-images").on("click","img",function(event){
 
     	//Add the recipe to the page.
 		recipe = response[0].instructions;
-    	recipeDiv = $("<div>");
+		var id = response[0].id;
+    	var recipeDiv = $("<div>");
+    	if(recipe === null){
+    		recipe = "";
+    	}
 		recipeDiv.html("<br><h3><strong>Recipe: </h3></strong><br><p>"+recipe+"</p>");
-		$("#ingredients").append(recipeDiv);   
-		
+		$("#ingredients").append(recipeDiv);		
     });
 })
 
@@ -366,13 +334,25 @@ function createIngredientList(ingredientsList){
 
 	for(var i=0; i < ingredientsList.length; i++){
 
-		ingredientDiv = $("<div>");
-		ingredientDiv.html(ingredientsList[i]);
+		ingredientDiv = $("<div class='well'>");
+		ingredientDiv.append("<i class='fa fa-circle-o' aria-hidden='true'></i>");
+		ingredientDiv.append(ingredientsList[i]);
 		ingredientDiv.attr("id", "ingredient_"+i);
 
 		ingredientDiv.css("min-height", "200px");
 		$("#ingredients").append(ingredientDiv);
 	}
+
+	if(favoritesList.indexOf(recipeID) < 0) {
+		$("#star").css({color: "white"});
+		$("#star").removeClass();
+		$("#star").addClass("fa fa-star-o");		
+	} else{
+		$("#star").css({color: "gold"});
+		$("#star").removeClass();
+		$("#star").addClass("fa fa-star");
+	}
+
 	$("#recipe-panel").addClass("hidden");
 	$("#ingredient-panel").removeClass("hidden");
 
@@ -382,7 +362,7 @@ function createIngredientList(ingredientsList){
 function createCarousel(i){
 
     var id = "carousel_" + i;
-	var outerDiv = $("<div class='carousel slide' data-ride='carousel'>")
+	var outerDiv = $("<div class='carousel slide' data-ride='carousel' data-interval='false'>")
     outerDiv.attr("id", id);
 
     var oList = $("<ol class='carousel-indicators'>");
@@ -401,8 +381,6 @@ function createCarousel(i){
 
 function addItemToCarousel(cNum, caption, url, price){
 
-	//console.log("Adding " + caption + "to carousel #" + cNum);
-
 	var id = "#carousel_" + cNum;
 	var listIndex = $(id).children(".carousel-indicators").children().length;
 	var active = "";
@@ -414,7 +392,7 @@ function addItemToCarousel(cNum, caption, url, price){
 
 	var item = $("<div class='item "+active+"'></div>");
 	item.css("data-price", price);
-	item.append("<span>$"+price+"</span>");
+	item.append("<span class='price'>$"+price+"</span>");
     item.append("<img class='carousel-image' src='"+url+"' alt=''>");
     var divCap = $("<div class='c-caption'></div>");
     divCap.append("<h2><strong>"+caption+"</strong></h2>");
@@ -424,30 +402,176 @@ function addItemToCarousel(cNum, caption, url, price){
 }
 
 function favoriteRecipeToFirebase(){
-	database.ref().on("value", function(snapshot) {
-	if (!snapshot.hasChild(recipeID)) {
+
     database.ref(recipeID).push({
-		recipeTitle :recipeTitle,
-		ingredientsList :ingredientsList,
+		recipeTitle: recipeTitle,
+		ingredientsList: ingredientsList,
 		recipe: recipe,
-		recipeID:recipeID,
-		imgURL: currentImgURL
-
+		recipeID: recipeID,
+		imgURL: currentImgURL,
+		timeStamp : firebase.database.ServerValue.TIMESTAMP
 	});
-	};
-});
-};
 
-$("#ingredients").on("click",function(){
-	favoriteRecipeToFirebase();
-	console.log("added to firebase");
+}
 
-});
+function removeFromFirebase(recipeID){
+
+	var rRef = firebase.database().ref(recipeID);
+	rRef.remove()
+	  .then(function() {
+	    console.log("Remove of "+recipeID+" succeeded.")
+	  })
+	  .catch(function(error) {
+	    console.log("Remove of "+recipeID+" failed: " + error.message)
+	  });
+}
 
 $("#star").on("click", function(event){
 
-	$(this).css({color: "yellow"});
-	$(this).removeClass();
-	$(this).addClass("fa fa-star");
+	if(favoritesList.indexOf(recipeID) < 0) {
+		favoriteRecipeToFirebase();
+		$(this).css({color: "gold"});
+		$(this).removeClass();
+		$(this).addClass("fa fa-star");
+	} else{
+		removeFromFirebase(recipeID);
+
+		var found = $("#favorited-list").find("img[data-recipe-id='"+recipeID+"']").length;
+		if(found){
+			$("#favorited-list").find("img[data-recipe-id='"+recipeID+"']").parent().parent().remove();
+		}
+
+		var idx = favoritesList.indexOf(recipeID);
+		favoritesList = favoritesList.filter(function(element, index) { return index !== idx});
+		$(this).css({color: "white"});
+		$(this).removeClass();
+		$(this).addClass("fa fa-star-o");
+	}
+
+});
+
+$("#favorited").on("click", function(event) {
+
+    event.preventDefault();
+    $("#favorited-panel").removeClass("hidden");
+});
+
+
+
+    
+
+    
+
+
+$("#favorited-list").on("click","img",function(event){
+
+	event.preventDefault();
+	recipeID = $(this).attr("data-recipe-id");
+	recipeTitle = $(this).attr("data-recipe-title");
+	currentImgURL = $(this).attr('src');
+
+	$.ajax({
+      url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk?ids="+recipeID+"&includeNutrition=false",
+      method: "GET",
+      headers: {	
+      	"X-Mashape-Key": apiKey,
+      	"Content-Type": "application/json",
+		}
+    }).done(function(response) {
+
+        //console.log("recipe response");
+    	//console.log(response); 	
+    	
+    	//Store the ingredients in array.
+    	ingredientsList=[];
+    	ingredientNames=[];
+    	for(var i=0; i < response[0].extendedIngredients.length; i++){
+
+    		ingredientsList.push(response[0].extendedIngredients[i].originalString);
+    		ingredientNames.push(response[0].extendedIngredients[i].name);
+    	}
+
+    	//Add the ingredients to the page.
+    	$("#ingredients").empty();
+    	createIngredientList(ingredientsList);
+
+    	var limit = 5;
+    	var delay = 0;
+    	for(var i=0; i<ingredientNames.length; i++){
+ 
+			var name = ingredientNames[i];
+
+			delay += 500;
+
+			timerId = setTimeout(productSearch, delay, name, i);
+    		$("#ingredient_"+i).append(createCarousel(i));
+    	}
+
+    	//Add the recipe to the page.
+		recipe = response[0].instructions;
+    	recipeDiv = $("<div>");
+		recipeDiv.html("<br><h3><strong>Recipe: </h3></strong><br><p>"+recipe+"</p>");
+		$("#ingredients").append(recipeDiv);   
+		$("#favorited-panel").addClass("hidden");
+    });
+});
+
+$("#ingredients").on("click","img",function(event){
+
+	var shopImg = $(this).clone();
+	shopImg.removeClass();
+
+	var parent = $(this).parent();
+	var price = parent.children(".price").text();
+	var caption = parent.children(".c-caption").text();
+	var innerDiv = $("<div>");
+    innerDiv.addClass("caption");
+	innerDiv.append("<h4 class='price'>"+price+"</h4>");
+	innerDiv.append("<p>"+caption+"</p>");
+
+	var cardDiv = $("<div>");
+	cardDiv.addClass("thumbnail");
+	cardDiv.append("<i class='fa fa-window-close-o' aria-hidden='true'></i>");
+	cardDiv.append(shopImg);
+	cardDiv.append(innerDiv);
+
+	price = price.replace("$", "");
+	var priceNum = parseFloat(price);
+	cartTotal += priceNum;
+
+	$("#cart-total").text("$"+cartTotal.toFixed(2));
+
+	$("#shopping-cart").append(cardDiv);
+
+	$("#shopping-panel").removeClass("hidden");
+
+});
+
+database.ref().on("value", function(snapshot) {
+
+	console.log(snapshot.val());
+	for(var key in snapshot.val()){
+		if(favoritesList.indexOf(key) < 0){
+			favoritesList.push(key);
+		}
+	}
+
+});
+
+$("#shopping-cart").on("click", "i", function(event){
+
+	// Update the cart total.
+	var price = $(this).parent().find(".price").text();
+	price = price.replace("$", "");
+	var priceNum = parseFloat(price);
+	cartTotal -= priceNum;
+	if(cartTotal <= 0.0){
+		cartTotal = 0.0;
+	}
+
+	$("#cart-total").text("$"+cartTotal.toFixed(2));
+
+	// Remove the item from the cart.
+	$(this).parent().remove();
 
 });

@@ -29,6 +29,10 @@
 	z-index: -1;
 }
 
+.carousel-image:hover {
+	cursor:pointer;cursor:hand;
+}
+
 ol.carousel-indicators {
   position: absolute;
   bottom: 0;
@@ -101,4 +105,36 @@ ol.carousel-indicators {
 	    bottom: 15px;
 	    left: 250px;
 	}
+=======
+.thumbnail {
+	width: 150px;
+	height: 220px;
+	float: left;
+	overflow: scroll;
+}
+
+.fa-window-close-o {
+	position: relative;
+	top: -2px;
+	left: -8px;
+	float: right;
+	color: orange;
+	width: 8px;
+	height: 8px;
+	z-index: 2;
+}
+
+.fa-window-close-o:hover {
+	cursor:pointer;cursor:hand;
+}
+
+.fa-circle-o {
+	margin: 5px;
+	font-size: 10px;
+}
+
+.well {
+	background-color: #93aed2;
+	padding: 10px;
+
 }
