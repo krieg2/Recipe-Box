@@ -1,4 +1,4 @@
-
+	
 var config = {
 	apiKey: "AIzaSyCZV0Z65ENjbB4eYBkBxwa6fg6chRH3iec",
 	authDomain: "testproject-df5f0.firebaseapp.com",
@@ -488,7 +488,7 @@ $("#ingredients").on("click","img",function(event){
 	var caption = parent.children(".c-caption").text();
 	var innerDiv = $("<div>");
     innerDiv.addClass("caption");
-	innerDiv.append("<h4>"+price+"</h4>");
+	innerDiv.append("<h4 class='price'>"+price+"</h4>");
 	innerDiv.append("<p>"+caption+"</p>");
 
 	var cardDiv = $("<div>");
@@ -496,8 +496,6 @@ $("#ingredients").on("click","img",function(event){
 	cardDiv.append("<i class='fa fa-window-close-o' aria-hidden='true'></i>");
 	cardDiv.append(shopImg);
 	cardDiv.append(innerDiv);
-
-	//var deleteIcon = $();
 
 	price = price.replace("$", "");
 	var priceNum = parseFloat(price);
@@ -519,5 +517,20 @@ database.ref().on("value", function(snapshot) {
 			favoritesList.push(key);
 		}
 	}
+
+});
+
+$("#shopping-cart").on("click", "i", function(event){
+
+	// Update the cart total.
+	var price = $(this).parent().find(".price").text();
+	price = price.replace("$", "");
+	var priceNum = parseFloat(price);
+	cartTotal -= priceNum;
+
+	$("#cart-total").text("$"+cartTotal.toFixed(2));
+
+	// Remove the item from the cart.
+	$(this).parent().remove();
 
 });
