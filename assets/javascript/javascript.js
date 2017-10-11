@@ -26,6 +26,7 @@ var recipeID;
 var currentImgURL;
 var cartTotal = 0;
 var divLength = ($("#favorited-list").length);
+var favoritesList = [];
 
 
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
@@ -54,7 +55,7 @@ function searchRecipesCallback(response){ //this is the callback function for th
 
 
 	for(i=0; i<response.results.length; i++){
-		////console.log(response.results[i].title);
+		//console.log(response.results[i].title);
 		recipesTitles.push(response.results[i].title);
 		recipeImg.push(response.results[i].image);
 		recipeIDArray.push(response.results[i].id);	
@@ -75,7 +76,7 @@ function submitSearch(event){ //this is the function for the submit button on th
 	$("#recipe-images").empty();
 	$("#ingredients").empty();
 
-	console.log("emptied");
+	//console.log("emptied");
 	event.preventDefault();
 	
 	var SearchQueryParameter = $("#ingredient-text").val().trim();
@@ -103,7 +104,7 @@ function submitSearch(event){ //this is the function for the submit button on th
 
 	// if no filters are selected 
 	ajax(searchQueryURL, apiKey, searchRecipesCallback);
-	console.log("searched");
+	//console.log("searched");
 
 }
 
@@ -175,15 +176,17 @@ function productSearch(ingredient, ingredientNum){
 	  }      
     }).done(function(response){
 
-    	console.log(response);
+    	//console.log(response);
 
-    	for(var i=0; i<response.items.length; i++){
+    	if(typeof response.items !== 'undefined'){
+	    	for(var i=0; i<response.items.length; i++){
 
-		   var name = response.items[i].name;
-		   var imgUrl = response.items[i].thumbnailImage;
-		   var price = response.items[i].salePrice;
+			   var name = response.items[i].name;
+			   var imgUrl = response.items[i].thumbnailImage;
+			   var price = response.items[i].salePrice;
 
-		   addItemToCarousel(ingredientNum, name, imgUrl, price);
+			   addItemToCarousel(ingredientNum, name, imgUrl, price);
+			}
 		}
     });
 }
@@ -212,8 +215,6 @@ $("#recipe-images").on("click","img",function(event){
 	recipeTitle = $(this).attr("data-recipe-title");
 	currentImgURL = $(this).attr('src');
 
-
-
 	$.ajax({
       url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk?ids="+recipeID+"&includeNutrition=false",
       method: "GET",
@@ -223,8 +224,8 @@ $("#recipe-images").on("click","img",function(event){
 		}
     }).done(function(response) {
 
-        console.log("recipe response");
-    	console.log(response); 	
+        //console.log("recipe response");
+    	//console.log(response); 	
     	
     	//Store the ingredients in array.
     	ingredientsList=[];
@@ -236,6 +237,7 @@ $("#recipe-images").on("click","img",function(event){
     	}
 
     	//Add the ingredients to the page.
+    	$("#ingredients").empty();
     	createIngredientList(ingredientsList);
 
     	var limit = 5;
@@ -252,8 +254,14 @@ $("#recipe-images").on("click","img",function(event){
 
     	//Add the recipe to the page.
 		recipe = response[0].instructions;
-    	recipeDiv = $("<div>");
+		var id = response[0].id;
+    	var recipeDiv = $("<div>");
+    	if(recipe === null){
+    		recipe = "";
+    	}
 		recipeDiv.html("<br><h3><strong>Recipe: </h3></strong><br><p>"+recipe+"</p>");
+		//var found = $("#favorited-list").find("img[data-recipe-id='840513']").length;
+		//console.log(found);
 		$("#ingredients").append(recipeDiv);   
 		
     });
@@ -272,6 +280,16 @@ function createIngredientList(ingredientsList){
 		ingredientDiv.css("min-height", "200px");
 		$("#ingredients").append(ingredientDiv);
 	}
+	if(favoritesList.indexOf(recipeID) < 0) {
+		$("#star").css({color: "white"});
+		$("#star").removeClass();
+		$("#star").addClass("fa fa-star-o");		
+	} else{
+		$("#star").css({color: "gold"});
+		$("#star").removeClass();
+		$("#star").addClass("fa fa-star");
+	}
+
 	$("#recipe-panel").addClass("hidden");
 	$("#ingredient-panel").removeClass("hidden");
 
@@ -321,35 +339,48 @@ function addItemToCarousel(cNum, caption, url, price){
 }
 
 function favoriteRecipeToFirebase(){
-	database.ref().on("value", function(snapshot) {
-	if (!snapshot.hasChild(recipeID)) {
+
     database.ref(recipeID).push({
-		recipeTitle :recipeTitle,
-		ingredientsList :ingredientsList,
+		recipeTitle: recipeTitle,
+		ingredientsList: ingredientsList,
 		recipe: recipe,
-		recipeID:recipeID,
+		recipeID: recipeID,
 		imgURL: currentImgURL
-
 	});
-	};
-});
-};
+}
 
-$("#ingredients").on("click",function(){
-	favoriteRecipeToFirebase();
-	console.log("added to firebase");
+function removeFromFirebase(recipeID){
 
-});
+	var rRef = firebase.database().ref(recipeID);
+	rRef.remove()
+	  .then(function() {
+	    console.log("Remove of "+recipeID+" succeeded.")
+	  })
+	  .catch(function(error) {
+	    console.log("Remove of "+recipeID+" failed: " + error.message)
+	  });
+}
 
 $("#star").on("click", function(event){
-	favoriteRecipeToFirebase();
-	$(this).css({color: "yellow"});
-	$(this).removeClass();
-	$(this).addClass("fa fa-star");
+
+	if(favoritesList.indexOf(recipeID) < 0) {
+		favoriteRecipeToFirebase();
+		$(this).css({color: "gold"});
+		$(this).removeClass();
+		$(this).addClass("fa fa-star");
+	} else{
+		removeFromFirebase(recipeID);
+		var idx = favoritesList.indexOf(recipeID);
+		favoritesList = favoritesList.filter(function(element, index) { return index !== idx});
+		$(this).css({color: "white"});
+		$(this).removeClass();
+		$(this).addClass("fa fa-star-o");
+	}
 
 });
 
 $("#favorited").on("click", function(event) {
+
     event.preventDefault();
 
     database.ref().on("value", function(snapshot) {
@@ -398,8 +429,6 @@ $("#favorited-list").on("click","img",function(event){
 	recipeTitle = $(this).attr("data-recipe-title");
 	currentImgURL = $(this).attr('src');
 
-
-
 	$.ajax({
       url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk?ids="+recipeID+"&includeNutrition=false",
       method: "GET",
@@ -409,8 +438,8 @@ $("#favorited-list").on("click","img",function(event){
 		}
     }).done(function(response) {
 
-        console.log("recipe response");
-    	console.log(response); 	
+        //console.log("recipe response");
+    	//console.log(response); 	
     	
     	//Store the ingredients in array.
     	ingredientsList=[];
@@ -422,6 +451,7 @@ $("#favorited-list").on("click","img",function(event){
     	}
 
     	//Add the ingredients to the page.
+    	$("#ingredients").empty();
     	createIngredientList(ingredientsList);
 
     	var limit = 5;
@@ -473,5 +503,16 @@ $("#ingredients").on("click","img",function(event){
 	$("#shopping-cart").append(cardDiv);
 
 	$("#shopping-panel").removeClass("hidden");
+
+});
+
+database.ref().on("value", function(snapshot) {
+
+	console.log(snapshot.val());
+	for(var key in snapshot.val()){
+		if(favoritesList.indexOf(key) < 0){
+			favoritesList.push(key);
+		}
+	}
 
 });
