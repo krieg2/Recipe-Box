@@ -50,6 +50,7 @@ ol.carousel-indicators {
 	float: right;
 }
 
+
 .ingredients-title{
 	margin-bottom: 15px;
 }
@@ -58,6 +59,53 @@ ol.carousel-indicators {
 	margin: 10px;
 }
 
+.paginationjs-page > *, .paginationjs-ellipsis  > *, .paginationjs-next  > *, .paginationjs-prev > *{
+	color: white;
+	float: left;
+	margin-left: 5px;
+}
+
+.recipe-header{
+	margin-left: 5px;
+}
+
+#pagination-container	{
+		position: relative;
+	    bottom: 15px;
+	    left: 975px;
+	}
+
+@media screen and (min-width: 1300px){
+	#pagination-container	{
+		position: relative;
+	    bottom: 15px;
+	    left: 950px;
+	}
+}
+
+@media screen and (max-width: 1200px){
+	#pagination-container	{
+		position: relative;
+	    bottom: 15px;
+	    left: 750px;
+	}
+}
+
+@media screen and (max-width: 990px){
+	#pagination-container	{
+		position: relative;
+	    bottom: 15px;
+	    left: 540px;
+	}
+}
+
+@media screen and (max-width: 700px){
+	#pagination-container	{
+		position: relative;
+	    bottom: 15px;
+	    left: 250px;
+	}
+=======
 .thumbnail {
 	width: 150px;
 	height: 220px;
@@ -88,4 +136,5 @@ ol.carousel-indicators {
 .well {
 	background-color: #93aed2;
 	padding: 10px;
+
 }

@@ -11,7 +11,7 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-var searchURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="
+var searchURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?&number=100&query="
 var apiKey = "rnhXAWLOK1mshe92gRq8upcR4GQap1kYjhnjsnG92yzGgZRARJ";
 var recipesTitles = [];
 var recipeImg=[];
@@ -24,6 +24,9 @@ var ingredientNames=[];
 var recipe;
 var recipeID;
 var currentImgURL;
+
+var divsForPagination =[];
+
 var cartTotal = 0;
 var divLength = ($("#favorited-list").length);
 var favoritesList = [];
@@ -56,6 +59,7 @@ database.ref().on("value", function(snapshot) {
 
         });
 });
+
 
 
 function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
@@ -95,6 +99,26 @@ function searchRecipesCallback(response){ //this is the callback function for th
 		$("#recipe-panel").removeClass("hidden");
 	}
 	appendTitleAndImages();
+
+	$('#pagination-container').pagination({
+    dataSource: divsForPagination,
+    callback: function(data, pagination) {
+        // template method of yourself
+
+        console.log(data);
+        $("#recipe-images").empty();
+        for(i=0; i<data.length;i++){
+        	var html = data[i].html();
+        	console.log(html);
+        	console.log(data[i]);
+        	var imgContainer = $("<div>");
+        	imgContainer.html(html);
+        	imgContainer.addClass("image-container");
+        	$("#recipe-images").append(imgContainer);
+
+        }
+    }
+})
 	
 }
 
@@ -110,28 +134,28 @@ function submitSearch(event){ //this is the function for the submit button on th
 	
 	var SearchQueryParameter = $("#ingredient-text").val().trim();
 	var cuisine = $("#cuisine-text").val().trim();
-	var searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query=" + SearchQueryParameter; 
+	var searchQueryURL = searchURL + SearchQueryParameter; 
 	var selectedRadioButton;
 
 	//both the cuisine filter and checkboxes are populated
 	if(!cuisine == "" && $('input[name=type]:checked').length > 0){
 		selectedRadioButton = $('input[name=type]:checked').val();
-		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ selectedRadioButton;
+		searchQueryURL = searchURL+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ selectedRadioButton;
 		//console.log(searchQueryURL);
 	}
 	// if just the cuisine filter is filled out 
-	else if(!cuisine == ""){
-		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&cuisine=" + cuisine;
+	else if(cuisine !== "none"){
+		searchQueryURL = searchURL + SearchQueryParameter +"&cuisine=" + cuisine;
+
 		//console.log(searchQueryURL);
 	}
 	// if just the checkbox filter is selected 
 	else if($('input[name=type]:checked').length > 0){
 		selectedRadioButton = $('input[name=type]:checked').val();
-		searchQueryURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query="+ SearchQueryParameter +"&type=" + selectedRadioButton;
+		searchQueryURL = searchURL + SearchQueryParameter +"&type=" + selectedRadioButton;
 		//console.log(searchQueryURL);
 	}
 
-	// if no filters are selected 
 	ajax(searchQueryURL, apiKey, searchRecipesCallback);
 	//console.log("searched");
 
@@ -156,11 +180,16 @@ function appendTitleAndImages(){
 		imgContainer.append(imgDiv);
 		imgTag.attr("data-recipe-id",recipeIDArray[i]);
 		imgDiv.append(imgTag);
-		$("#recipe-images").append(imgContainer);
+		//$("#recipe-images").append(imgContainer);
+
+		divsForPagination.push(imgContainer);
+
 	}
 	
 	$("#recipe-panel").removeClass("hidden");
 }
+
+
 
 function ingredientBackButton(){
 
@@ -170,6 +199,8 @@ function ingredientBackButton(){
 
 }
 
+
+// on click for submit and ingredients 
 function cartHideButton(){
 
     if($("#cart-hide-button").text().trim() === "Hide"){
@@ -181,6 +212,7 @@ function cartHideButton(){
 	}
 
 }
+
 
 $("#submit").on("click", submitSearch);
 
