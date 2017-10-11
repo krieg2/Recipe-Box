@@ -213,6 +213,9 @@ function productSearch(ingredient, ingredientNum){
 			   var name = response.items[i].name;
 			   var imgUrl = response.items[i].thumbnailImage;
 			   var price = response.items[i].salePrice;
+			   if(typeof price === 'undefined'){
+			       price = 0.0;
+			   }
 
 			   addItemToCarousel(ingredientNum, name, imgUrl, price);
 			}
