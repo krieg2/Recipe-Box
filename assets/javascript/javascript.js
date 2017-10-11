@@ -342,8 +342,10 @@ function favoriteRecipeToFirebase(){
 		ingredientsList: ingredientsList,
 		recipe: recipe,
 		recipeID: recipeID,
-		imgURL: currentImgURL
+		imgURL: currentImgURL,
+		timeStamp : firebase.database.ServerValue.TIMESTAMP
 	});
+
 }
 
 function removeFromFirebase(recipeID){
@@ -385,11 +387,12 @@ $("#star").on("click", function(event){
 $("#favorited").on("click", function(event) {
 
     event.preventDefault();
+    $("#favorited-panel").removeClass("hidden");
+});
 
-    database.ref().on("value", function(snapshot) {
-    	var snapShotLength = snapshot.numChildren();
-    	if(snapShotLength> divLength){
 
+database.ref().on("value", function(snapshot) {
+	$("#favorited-list").empty();
         snapshot.forEach(function(child) {
             child.forEach(function(grandchild) {
                 var key = grandchild.val();
@@ -415,15 +418,11 @@ $("#favorited").on("click", function(event) {
             });
 
         });
-		
-    };
-    divLength +=snapShotLength;
+});
     
-	});
-    $("#favorited-panel").removeClass("hidden");
 
     
-});
+
 
 $("#favorited-list").on("click","img",function(event){
 
