@@ -270,7 +270,7 @@ function createIngredientList(ingredientsList){
 
 	for(var i=0; i < ingredientsList.length; i++){
 
-		ingredientDiv = $("<div>");
+		ingredientDiv = $("<div class='well'>");
 		ingredientDiv.append("<i class='fa fa-circle-o' aria-hidden='true'></i>");
 		ingredientDiv.append(ingredientsList[i]);
 		ingredientDiv.attr("id", "ingredient_"+i);
