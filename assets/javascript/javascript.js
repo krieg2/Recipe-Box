@@ -493,9 +493,11 @@ $("#ingredients").on("click","img",function(event){
 
 	var cardDiv = $("<div>");
 	cardDiv.addClass("thumbnail");
-	cardDiv.css({});
+	cardDiv.append("<i class='fa fa-window-close-o' aria-hidden='true'></i>");
 	cardDiv.append(shopImg);
 	cardDiv.append(innerDiv);
+
+	//var deleteIcon = $();
 
 	price = price.replace("$", "");
 	var priceNum = parseFloat(price);

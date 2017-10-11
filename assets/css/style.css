@@ -60,3 +60,12 @@ ol.carousel-indicators {
 	float: left;
 	overflow: scroll;
 }
+
+.fa-window-close-o {
+	margin-right: 5px;
+	float: right;
+	color: orange;
+	width: 8px;
+	height: 8px;
+	z-index: 2;
+}
