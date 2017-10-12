@@ -123,41 +123,52 @@ function searchRecipesCallback(response){ //this is the callback function for th
 }
 
 function submitSearch(event){ //this is the function for the submit button on the search form
-	// hide search form 
-	// display results under the recipes panal 
-	$("#ingredient-panel").addClass("hidden");
-	$("#recipe-images").empty();
-	$("#ingredients").empty();
-
-	//console.log("emptied");
-	event.preventDefault();
 	
 	var SearchQueryParameter = $("#ingredient-text").val().trim();
 	var cuisine = $("#cuisine-text").val().trim();
 	var searchQueryURL = searchURL + SearchQueryParameter; 
 	var selectedRadioButton;
 
-	//both the cuisine filter and checkboxes are populated
-	if(!cuisine == "" && $('input[name=type]:checked').length > 0){
-		selectedRadioButton = $('input[name=type]:checked').val();
-		searchQueryURL = searchURL+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ selectedRadioButton;
-		//console.log(searchQueryURL);
-	}
-	// if just the cuisine filter is filled out 
-	else if(cuisine !== "none"){
-		searchQueryURL = searchURL + SearchQueryParameter +"&cuisine=" + cuisine;
 
-		//console.log(searchQueryURL);
-	}
-	// if just the checkbox filter is selected 
-	else if($('input[name=type]:checked').length > 0){
-		selectedRadioButton = $('input[name=type]:checked').val();
-		searchQueryURL = searchURL + SearchQueryParameter +"&type=" + selectedRadioButton;
-		//console.log(searchQueryURL);
+	if(SearchQueryParameter == ""){
+		swal ( "Oops" ,  "Please enter an Ingredient!" ,  "error" );
 	}
 
-	ajax(searchQueryURL, apiKey, searchRecipesCallback);
-	//console.log("searched");
+	else{
+
+		// hide search form 
+		// display results under the recipes panal 
+		$("#ingredient-panel").addClass("hidden");
+		$("#recipe-images").empty();
+		$("#ingredients").empty();
+
+		//console.log("emptied");
+		event.preventDefault();
+		
+
+
+		//both the cuisine filter and checkboxes are populated
+		if(!cuisine == "" && $('input[name=type]:checked').length > 0){
+			selectedRadioButton = $('input[name=type]:checked').val();
+			searchQueryURL = searchURL+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ selectedRadioButton;
+			//console.log(searchQueryURL);
+		}
+		// if just the cuisine filter is filled out 
+		else if(cuisine !== "none"){
+			searchQueryURL = searchURL + SearchQueryParameter +"&cuisine=" + cuisine;
+
+			//console.log(searchQueryURL);
+		}
+		// if just the checkbox filter is selected 
+		else if($('input[name=type]:checked').length > 0){
+			selectedRadioButton = $('input[name=type]:checked').val();
+			searchQueryURL = searchURL + SearchQueryParameter +"&type=" + selectedRadioButton;
+			//console.log(searchQueryURL);
+		}
+
+		ajax(searchQueryURL, apiKey, searchRecipesCallback);
+		//console.log("searched");
+	}
 
 }
 
@@ -219,7 +230,6 @@ $('input').click(function(e){
         $(this).prop('checked', false);
     }
 });
-
 
 $("#submit").on("click", submitSearch);
 
