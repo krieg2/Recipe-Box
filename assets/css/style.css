@@ -113,6 +113,7 @@ ol.carousel-indicators {
 	height: 220px;
 	float: left;
 	overflow: scroll;
+	margin: 4px;
 }
 
 .fa-window-close-o {
