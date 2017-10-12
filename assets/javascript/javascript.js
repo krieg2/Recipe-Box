@@ -226,7 +226,7 @@ function cartHideButton(){
 
 $('input').click(function(e){
 	console.log(e);
-    if (e.ctrlKey) {
+    if (e.altKey) {
         $(this).prop('checked', false);
     }
 });
