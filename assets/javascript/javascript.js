@@ -1,4 +1,4 @@
-	
+
 var config = {
 	apiKey: "AIzaSyCZV0Z65ENjbB4eYBkBxwa6fg6chRH3iec",
 	authDomain: "testproject-df5f0.firebaseapp.com",
@@ -212,6 +212,13 @@ function cartHideButton(){
 	}
 
 }
+
+$('input').click(function(e){
+	console.log(e);
+    if (e.ctrlKey) {
+        $(this).prop('checked', false);
+    }
+});
 
 
 $("#submit").on("click", submitSearch);
