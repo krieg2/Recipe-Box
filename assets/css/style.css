@@ -60,6 +60,12 @@ ol.carousel-indicators {
 	cursor:pointer;cursor:hand;
 }
 
+.well {
+	background-color: #93aed2;
+	padding: 10px;
+	min-height: 200px;
+}
+
 .paginationjs-page > *, .paginationjs-ellipsis  > *, .paginationjs-next  > *, .paginationjs-prev > *{
 	color: white;
 	float: left;
@@ -70,11 +76,11 @@ ol.carousel-indicators {
 	margin-left: 5px;
 }
 
-#pagination-container	{
+#pagination-container{
 		position: relative;
 	    bottom: 15px;
 	    left: 975px;
-	}
+}
 
 @media screen and (min-width: 1300px){
 	#pagination-container	{
@@ -98,6 +104,9 @@ ol.carousel-indicators {
 	    bottom: 15px;
 	    left: 540px;
 	}
+	.well {
+		min-height: 250px;
+	}
 }
 
 @media screen and (max-width: 700px){
@@ -105,6 +114,9 @@ ol.carousel-indicators {
 		position: relative;
 	    bottom: 15px;
 	    left: 250px;
+	}
+	.well {
+		min-height: 250px;
 	}
 }
 
@@ -134,10 +146,4 @@ ol.carousel-indicators {
 .fa-circle-o {
 	margin: 5px;
 	font-size: 10px;
-}
-
-.well {
-	background-color: #93aed2;
-	padding: 10px;
-
 }

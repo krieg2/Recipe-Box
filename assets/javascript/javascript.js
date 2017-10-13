@@ -356,7 +356,6 @@ function createIngredientList(ingredientsList){
 		ingredientDiv.append(ingredientsList[i]);
 		ingredientDiv.attr("id", "ingredient_"+i);
 
-		ingredientDiv.css("min-height", "200px");
 		$("#ingredients").append(ingredientDiv);
 	}
 
