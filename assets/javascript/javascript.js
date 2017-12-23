@@ -31,6 +31,7 @@ var cartTotal = 0;
 var divLength = ($("#favorited-list").length);
 var favoritesList = [];
 
+//creates a container with food images for the user's favorited list from firebase
 database.ref().on("value", function(snapshot) {
 	$("#favorited-list").empty();
         snapshot.forEach(function(child) {
@@ -62,28 +63,28 @@ database.ref().on("value", function(snapshot) {
 
 
 
-function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
+function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes
 
 	$.ajax({
       url: URL,
       method: "GET",
-      headers: {	
+      headers: {
       	"X-Mashape-Key": APIkey,
 		"Accept": "application/json"
 		}
     }).done(CALLBACK);
 }
 
-function searchRecipesCallback(response){ //this is the callback function for the ajax search recipes 
+function searchRecipesCallback(response){ //this is the callback function for the ajax search recipes
 	// put stuff to firebase
-	// TODO - we should delete the object from the previous search and put in the new one. 
+	// TODO - we should delete the object from the previous search and put in the new one.
 
 	baseURI = response.baseUri;
 	recipesTitles = [];
 	recipeImg=[];
 	recipeIDArray=[];
 
-	// going to get the title from each result and console log it 
+	// going to get the title from each result and console log it
 
 
 
@@ -91,7 +92,7 @@ function searchRecipesCallback(response){ //this is the callback function for th
 		//console.log(response.results[i].title);
 		recipesTitles.push(response.results[i].title);
 		recipeImg.push(response.results[i].image);
-		recipeIDArray.push(response.results[i].id);	
+		recipeIDArray.push(response.results[i].id);
 	}
 
 	if(response.results <1){
@@ -99,7 +100,7 @@ function searchRecipesCallback(response){ //this is the callback function for th
 		$("#recipe-panel").removeClass("hidden");
 	}
 	appendTitleAndImages();
-
+//breaks out the recipe images into multiple pages
 	$('#pagination-container').pagination({
     dataSource: divsForPagination,
     callback: function(data, pagination) {
@@ -119,14 +120,14 @@ function searchRecipesCallback(response){ //this is the callback function for th
         }
     }
 })
-	
+
 }
 
 function submitSearch(event){ //this is the function for the submit button on the search form
-	
+
 	var SearchQueryParameter = $("#ingredient-text").val().trim();
 	var cuisine = $("#cuisine-text").val().trim();
-	var searchQueryURL = searchURL + SearchQueryParameter; 
+	var searchQueryURL = searchURL + SearchQueryParameter;
 	var selectedRadioButton;
 
 
@@ -136,15 +137,15 @@ function submitSearch(event){ //this is the function for the submit button on th
 
 	else{
 
-		// hide search form 
-		// display results under the recipes panal 
+		// hide search form
+		// display results under the recipes panal
 		$("#ingredient-panel").addClass("hidden");
 		$("#recipe-images").empty();
 		$("#ingredients").empty();
 
 		//console.log("emptied");
 		event.preventDefault();
-		
+
 
 
 		//both the cuisine filter and checkboxes are populated
@@ -153,13 +154,13 @@ function submitSearch(event){ //this is the function for the submit button on th
 			searchQueryURL = searchURL+ SearchQueryParameter +"&cuisine=" + cuisine +"&type="+ selectedRadioButton;
 			//console.log(searchQueryURL);
 		}
-		// if just the cuisine filter is filled out 
+		// if just the cuisine filter is filled out
 		else if(cuisine !== "none"){
 			searchQueryURL = searchURL + SearchQueryParameter +"&cuisine=" + cuisine;
 
 			//console.log(searchQueryURL);
 		}
-		// if just the checkbox filter is selected 
+		// if just the checkbox filter is selected
 		else if($('input[name=type]:checked').length > 0){
 			selectedRadioButton = $('input[name=type]:checked').val();
 			searchQueryURL = searchURL + SearchQueryParameter +"&type=" + selectedRadioButton;
@@ -172,6 +173,7 @@ function submitSearch(event){ //this is the function for the submit button on th
 
 }
 
+//creates a container with food images for the user's search
 function appendTitleAndImages(){
 	for(var i=0;i<recipesTitles.length;i++){
 		var imgContainer = $('<div>');
@@ -191,12 +193,11 @@ function appendTitleAndImages(){
 		imgContainer.append(imgDiv);
 		imgTag.attr("data-recipe-id",recipeIDArray[i]);
 		imgDiv.append(imgTag);
-		//$("#recipe-images").append(imgContainer);
 
 		divsForPagination.push(imgContainer);
 
 	}
-	
+
 	$("#recipe-panel").removeClass("hidden");
 }
 
@@ -211,7 +212,7 @@ function ingredientBackButton(){
 }
 
 
-// on click for submit and ingredients 
+// on click for submit and ingredients
 function cartHideButton(){
 
     if($("#cart-hide-button").text().trim() === "Hide"){
@@ -240,18 +241,18 @@ $("#cart-hide-button").on("click", cartHideButton);
 // Walmart API search. Note: this search does not always work well.
 function productSearch(ingredient, ingredientNum){
 
-	var searchQueryURL = "https://cors-anywhere.herokuapp.com/" + 
+	var searchQueryURL = "https://cors-anywhere.herokuapp.com/" +
 	                     "http://api.walmartlabs.com/v1/search?" +
 	                     "apiKey=z5m92qf29tv7u76f4vaztra4" +
 	                     "&categoryId=976759" +
-	                     "&query=" + ingredient; 
+	                     "&query=" + ingredient;
 
 	$.ajax({
       url: searchQueryURL,
       method: "GET",
-      headers: {	
+      headers: {
        	"X-Requested-With": "XMLHttpRequest"
-	  }      
+	  }
     }).done(function(response){
 
     	//console.log(response);
@@ -280,7 +281,7 @@ function recipeIngredients(event){
 	$.ajax({
       url: s,
       method: "GET",
-      headers: {	
+      headers: {
       	"X-Mashape-Key": apiKey,
 		"Accept": "application/json"
 		}
@@ -289,6 +290,7 @@ function recipeIngredients(event){
     });
 }
 
+//gets the information on recipe based on the images user click
 $("#recipe-images").on("click","img",function(event){
 
 	event.preventDefault();
@@ -299,15 +301,12 @@ $("#recipe-images").on("click","img",function(event){
 	$.ajax({
       url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk?ids="+recipeID+"&includeNutrition=false",
       method: "GET",
-      headers: {	
+      headers: {
       	"X-Mashape-Key": apiKey,
       	"Content-Type": "application/json",
 		}
     }).done(function(response) {
 
-        //console.log("recipe response");
-    	//console.log(response); 	
-    	
     	//Store the ingredients in array.
     	ingredientsList=[];
     	ingredientNames=[];
@@ -324,7 +323,7 @@ $("#recipe-images").on("click","img",function(event){
     	var limit = 5;
     	var delay = 0;
     	for(var i=0; i<ingredientNames.length; i++){
- 
+
 			var name = ingredientNames[i];
 
 			delay += 500;
@@ -341,12 +340,13 @@ $("#recipe-images").on("click","img",function(event){
     		recipe = "";
     	}
 		recipeDiv.html("<br><h3><strong>Recipe: </h3></strong><br><p>"+recipe+"</p>");
-		$("#ingredients").append(recipeDiv);		
+		$("#ingredients").append(recipeDiv);
     });
 })
 
+//creates the recipe list html on the page
 function createIngredientList(ingredientsList){
-	
+
 	$("#ingredients").append("<h2>"+recipeTitle+"</h2><br>");
 
 	for(var i=0; i < ingredientsList.length; i++){
@@ -362,7 +362,7 @@ function createIngredientList(ingredientsList){
 	if(favoritesList.indexOf(recipeID) < 0) {
 		$("#star").css({color: "white"});
 		$("#star").removeClass();
-		$("#star").addClass("fa fa-star-o");		
+		$("#star").addClass("fa fa-star-o");
 	} else{
 		$("#star").css({color: "gold"});
 		$("#star").removeClass();
@@ -387,9 +387,9 @@ function createCarousel(i){
     var innerDiv = $("<div class='carousel-inner'>");
     outerDiv.append(innerDiv);
 
-    outerDiv.append("<a class='left carousel-control' href='#carousel_" + i + 
+    outerDiv.append("<a class='left carousel-control' href='#carousel_" + i +
     	"' role='button' data-slide='prev'><span class='glyphicon glyphicon-chevron-left'>");
-	outerDiv.append("<a class='right carousel-control' href='#carousel_" + i + 
+	outerDiv.append("<a class='right carousel-control' href='#carousel_" + i +
 	    	"' role='button' data-slide='next'><span class='glyphicon glyphicon-chevron-right'>");
 
 	return outerDiv;
@@ -473,12 +473,6 @@ $("#favorited").on("click", function(event) {
 });
 
 
-
-    
-
-    
-
-
 $("#favorited-list").on("click","img",function(event){
 
 	event.preventDefault();
@@ -489,15 +483,13 @@ $("#favorited-list").on("click","img",function(event){
 	$.ajax({
       url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk?ids="+recipeID+"&includeNutrition=false",
       method: "GET",
-      headers: {	
+      headers: {
       	"X-Mashape-Key": apiKey,
       	"Content-Type": "application/json",
 		}
     }).done(function(response) {
 
-        //console.log("recipe response");
-    	//console.log(response); 	
-    	
+
     	//Store the ingredients in array.
     	ingredientsList=[];
     	ingredientNames=[];
@@ -514,7 +506,7 @@ $("#favorited-list").on("click","img",function(event){
     	var limit = 5;
     	var delay = 0;
     	for(var i=0; i<ingredientNames.length; i++){
- 
+
 			var name = ingredientNames[i];
 
 			delay += 500;
@@ -527,7 +519,7 @@ $("#favorited-list").on("click","img",function(event){
 		recipe = response[0].instructions;
     	recipeDiv = $("<div>");
 		recipeDiv.html("<br><h3><strong>Recipe: </h3></strong><br><p>"+recipe+"</p>");
-		$("#ingredients").append(recipeDiv);   
+		$("#ingredients").append(recipeDiv);
 		$("#favorited-panel").addClass("hidden");
     });
 });
