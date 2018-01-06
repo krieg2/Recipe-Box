@@ -11,8 +11,7 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-var searchURL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?&number=100&query="
-var apiKey = "rnhXAWLOK1mshe92gRq8upcR4GQap1kYjhnjsnG92yzGgZRARJ";
+var searchURL = "https://thawing-headland-90979.herokuapp.com/api/recipes/search?&number=100&query="
 var recipesTitles = [];
 var recipeImg=[];
 var recipeIDArray=[];
@@ -62,13 +61,12 @@ database.ref().on("value", function(snapshot) {
 
 
 
-function ajax(URL, APIkey, CALLBACK){ //ajax function for search recipes 
+function ajax(URL, CALLBACK){ //ajax function for search recipes 
 
 	$.ajax({
       url: URL,
       method: "GET",
       headers: {	
-      	"X-Mashape-Key": APIkey,
 		"Accept": "application/json"
 		}
     }).done(CALLBACK);
@@ -166,7 +164,7 @@ function submitSearch(event){ //this is the function for the submit button on th
 			//console.log(searchQueryURL);
 		}
 
-		ajax(searchQueryURL, apiKey, searchRecipesCallback);
+		ajax(searchQueryURL, searchRecipesCallback);
 		//console.log("searched");
 	}
 
@@ -240,18 +238,11 @@ $("#cart-hide-button").on("click", cartHideButton);
 // Walmart API search. Note: this search does not always work well.
 function productSearch(ingredient, ingredientNum){
 
-	var searchQueryURL = "https://cors-anywhere.herokuapp.com/" + 
-	                     "http://api.walmartlabs.com/v1/search?" +
-	                     "apiKey=z5m92qf29tv7u76f4vaztra4" +
-	                     "&categoryId=976759" +
-	                     "&query=" + ingredient; 
+	var searchQueryURL = "https://thawing-headland-90979.herokuapp.com/api/product/search/"+ingredient;
 
 	$.ajax({
       url: searchQueryURL,
-      method: "GET",
-      headers: {	
-       	"X-Requested-With": "XMLHttpRequest"
-	  }      
+      method: "GET"  
     }).done(function(response){
 
     	//console.log(response);
@@ -272,23 +263,6 @@ function productSearch(ingredient, ingredientNum){
     });
 }
 
-//Get recipe information.
-function recipeIngredients(event){
-
-    var s = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/" +
-         "583672" + "/information";
-	$.ajax({
-      url: s,
-      method: "GET",
-      headers: {	
-      	"X-Mashape-Key": apiKey,
-		"Accept": "application/json"
-		}
-    }).done(function(response) {
-    	//console.log(response)
-    });
-}
-
 $("#recipe-images").on("click","img",function(event){
 
 	event.preventDefault();
@@ -297,12 +271,8 @@ $("#recipe-images").on("click","img",function(event){
 	currentImgURL = $(this).attr('src');
 
 	$.ajax({
-      url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk?ids="+recipeID+"&includeNutrition=false",
-      method: "GET",
-      headers: {	
-      	"X-Mashape-Key": apiKey,
-      	"Content-Type": "application/json",
-		}
+      url: "https://thawing-headland-90979.herokuapp.com/api/recipe/"+recipeID,
+      method: "GET"
     }).done(function(response) {
 
         //console.log("recipe response");
@@ -487,12 +457,8 @@ $("#favorited-list").on("click","img",function(event){
 	currentImgURL = $(this).attr('src');
 
 	$.ajax({
-      url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk?ids="+recipeID+"&includeNutrition=false",
-      method: "GET",
-      headers: {	
-      	"X-Mashape-Key": apiKey,
-      	"Content-Type": "application/json",
-		}
+      url: "https://thawing-headland-90979.herokuapp.com/api/recipe/"+recipeID,
+      method: "GET"
     }).done(function(response) {
 
         //console.log("recipe response");
