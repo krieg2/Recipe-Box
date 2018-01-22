@@ -7,7 +7,12 @@ export default {
   	let queries = "&query=" + ingredientString;
     url = url + queries;
 
-  	console.log(url);
+    return axios.get(url);
+  },
+  getRecipe: function(recipeId) {
+
+  	let url = "https://thawing-headland-90979.herokuapp.com/api/recipe/"+recipeId;
+
     return axios.get(url);
   }
 };

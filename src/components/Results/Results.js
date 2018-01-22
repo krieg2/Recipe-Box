@@ -88,7 +88,8 @@ class Results extends Component {
     let recipes = this.state.currentItems;
 
     const customStyle = {
-      overflow: "hidden"
+      overflow: "hidden",
+      cursor: "pointer"
     };
 
     for(i=0; i < recipes.length &&
@@ -96,22 +97,22 @@ class Results extends Component {
 
       result.push(<Row key={recipes[i].id}>
         <Col xs={3} md={3}>
-          <Thumbnail src={this.props.baseURL + recipes[i].image}>
+          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i].image} href={"/recipe/"+recipes[i].id}>
             <p>{recipes[i].title}</p>
           </Thumbnail>
         </Col>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+1].image}>
+          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+1].image} href={"/recipe/"+recipes[i].id}>
             <p>{recipes[i+1].title}</p>
           </Thumbnail>
         </Col>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+2].image}>
+          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+2].image} href={"/recipe/"+recipes[i].id}>
             <p>{recipes[i+2].title}</p>
           </Thumbnail>
         </Col>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+3].image}>
+          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+3].image} href={"/recipe/"+recipes[i].id}>
             <p>{recipes[i+3].title}</p>
           </Thumbnail>
         </Col>
@@ -122,7 +123,7 @@ class Results extends Component {
 
       let remainingCols = recipes.slice(i).map( element => {
         return (<Col xs={3} md={3}>
-                  <Thumbnail style={customStyle} src={this.props.baseURL + element.image}>
+                  <Thumbnail style={customStyle} src={this.props.baseURL + element.image} href={"/recipe/"+element.id}>
                     <p>{element.title}</p>
                   </Thumbnail>
                 </Col>);
