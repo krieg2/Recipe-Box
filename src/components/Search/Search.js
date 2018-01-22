@@ -14,14 +14,16 @@ class Search extends Component {
   state = {
     searchText: "",
     results: [],
-    baseURL: ""
+    baseURL: "",
+    cuisine: "",
+    typeRadio: ""
   };
 
   handleSubmit = (event) => {
 
     event.preventDefault();
 
-    API.searchRecipes(this.state.searchText)
+    API.searchRecipes(this.state.searchText, this.state.cuisine, this.state.typeRadio)
     .then( searchResults => {
       //console.log(searchResults);
       //console.log(searchResults.data.results);
@@ -34,11 +36,15 @@ class Search extends Component {
     return;
   };
 
+  showState = (event) => {
+    alert(JSON.stringify(this.state));
+  };
+
   handleChange = (event) => {
 
-    event.preventDefault();
-
-    this.setState({searchText: event.target.value});
+    this.setState({
+      [event.target.name]: event.target.value
+    });
 
     return;
   };
@@ -63,8 +69,10 @@ class Search extends Component {
               <FormControl
                 componentClass="input"
                 type="text"
+                name="searchText"
                 placeholder="Enter text"
                 onChange={this.handleChange}
+                value={this.state.searchText}
               />
             </FormGroup>
             <FormGroup controlId="searchForm">
@@ -72,9 +80,12 @@ class Search extends Component {
                 <FormControl
                   componentClass="select"
                   type="text"
+                  name="cuisine"
+                  onChange={this.handleChange}
+                  value={this.state.cuisine}
                 >
                   <option value="none">Select a Cuisine</option>
-                  <option value= "african">African</option>
+                  <option value= "african"> African </option>
                   <option value = "chinese"> Chinese </option>
                   <option value = "japanese"> Japanese </option>
                   <option value = "korean"> Korean </option>
@@ -99,14 +110,15 @@ class Search extends Component {
                   <option value = "caribbean"> Caribbean </option>
                   <option value = "latin american"> Latin American </option>
                 </FormControl>
-                <FormGroup>
+                <br/>
+                <FormGroup value={this.state.typeRadio}>
                   <ControlLabel>Additional Filters</ControlLabel>
-                  <Radio name="radioGroup" value="breakfast"> Breakfast</Radio>
-                  <Radio name="radioGroup" value="lunch"> Lunch</Radio>
-                  <Radio name="radioGroup" value="dinner"> Dinner</Radio>
-                  <Radio name="radioGroup" value="side dish"> Side Dish</Radio>
-                  <Radio name="radioGroup" value="appetizer"> Appetizer</Radio>
-                  <Radio name="radioGroup" value="salad"> Salad</Radio>
+                  <Radio onChange={this.handleChange} name="typeRadio" value="breakfast" checked={this.state.typeRadio === "breakfast"}> Breakfast</Radio>
+                  <Radio onChange={this.handleChange} name="typeRadio" value="lunch" checked={this.state.typeRadio === "lunch"}> Lunch</Radio>
+                  <Radio onChange={this.handleChange} name="typeRadio" value="dinner" checked={this.state.typeRadio === "dinner"}> Dinner</Radio>
+                  <Radio onChange={this.handleChange} name="typeRadio" value="side dish" checked={this.state.typeRadio === "side dish"}> Side Dish</Radio>
+                  <Radio onChange={this.handleChange} name="typeRadio" value="appetizer" checked={this.state.typeRadio === "appetizer"}> Appetizer</Radio>
+                  <Radio onChange={this.handleChange} name="typeRadio" value="salad" checked={this.state.typeRadio === "salad"}> Salad</Radio>
                 </FormGroup>
               </FormGroup>
               <br/>
