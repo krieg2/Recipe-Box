@@ -13,25 +13,25 @@ import './App.css';
 class App extends Component {
   render() {
     return (
-      <Grid>
-        <Row>
-          <Header />
-          <br />
-        </Row>
-        <Row>
-          <Col xs={12} md={12}>
-            <Router>
-              <Switch>
-                <Route exact path="/" component={Search} />
-                <Route exact path="/cart" component={Cart} />
-                <Route exact path="/favorites" component={Favorites} />
-                <Route exact path="/recipe/:id" component={Ingredients} />
-                <Route component={NoMatch} />
-              </Switch>
-            </Router>
-          </Col>
-        </Row>
-      </Grid>
+      <Router basename="/Recipe-Box">
+        <Grid>
+          <Row>
+            <Header />
+            <br />
+          </Row>
+          <Row>
+            <Col xs={12} md={12}>
+                <Switch>
+                  <Route exact path="/" component={Search} />
+                  <Route exact path="/cart" component={Cart} />
+                  <Route exact path="/favorites" component={Favorites} />
+                  <Route exact path="/recipe/:id" component={Ingredients} />
+                  <Route component={NoMatch} />
+                </Switch>
+            </Col>
+          </Row>
+        </Grid>
+      </Router>
     );
   }
 }
