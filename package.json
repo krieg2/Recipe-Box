@@ -5,6 +5,7 @@
   "homepage": "https://krieg2.github.io/Recipe-Box/",
   "dependencies": {
     "axios": "^0.17.1",
+    "query-string": "^5.0.1",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.0",
     "react-dom": "^16.2.0",

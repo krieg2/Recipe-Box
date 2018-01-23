@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Panel, Button, Well } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import API from "../../utils/API";
+const queryString = require("query-string");
 
 class Ingredients extends Component {
 
@@ -11,7 +12,9 @@ class Ingredients extends Component {
   };
 
   componentDidMount() {
-    API.getRecipe(this.props.match.params.id)
+    const params = queryString.parse(this.props.location.search);
+    console.log("params: " + JSON.stringify(params));
+    API.getRecipe(params.id)
       .then( res => {
         console.log(res);
         this.setState({

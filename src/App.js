@@ -25,7 +25,7 @@ class App extends Component {
                   <Route exact path="/" component={Search} />
                   <Route exact path="/cart" component={Cart} />
                   <Route exact path="/favorites" component={Favorites} />
-                  <Route exact path="/recipe/:id" component={Ingredients} />
+                  <Route exact path="/recipe" component={Ingredients} />
                   <Route component={NoMatch} />
                 </Switch>
             </Col>
