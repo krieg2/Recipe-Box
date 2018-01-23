@@ -142,10 +142,7 @@ class Results extends Component {
 
       const buttonGrpStyle = {
         float: "right",
-        margin: "5px",
-        position: "absolute",
-        top: "0px",
-        right: "15px"
+        marginBottom: "25px"
       };
 
       return(
@@ -154,13 +151,17 @@ class Results extends Component {
                 <Panel.Title componentClass="h3">
                   <strong><i className="fa fa-cutlery"></i>  Recipes </strong>
                 </Panel.Title>
-                <ButtonGroup bsSize="small" style={buttonGrpStyle}>
-                  <Button onClick={this.prevPage} bsStyle="default">Previous Page</Button>
-                  {this.displayPageBtns()}
-                  <Button onClick={this.nextPage} bsStyle="default">Next Page</Button>
-                  </ButtonGroup>
               </Panel.Heading>
               <Panel.Body>
+                <Row>
+                  <Col xs={12} md={12}>
+                    <ButtonGroup bsSize="small" style={buttonGrpStyle}>
+                      <Button onClick={this.prevPage} bsStyle="default">Previous Page</Button>
+                      {this.displayPageBtns()}
+                      <Button onClick={this.nextPage} bsStyle="default">Next Page</Button>
+                    </ButtonGroup>
+                  </Col>
+                </Row>
                 {this.displayRecipes()}
               </Panel.Body>
             </Panel>);
