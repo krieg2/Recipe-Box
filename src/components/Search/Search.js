@@ -3,7 +3,7 @@ import Results from "../Results";
 import API from "../../utils/API";
 import { Panel, FormGroup, Button,
          ControlLabel, FormControl,
-         Radio, Form } from "react-bootstrap";
+         Radio } from "react-bootstrap";
 
 const requiredStyle = {
     color: "red"

@@ -103,17 +103,17 @@ class Results extends Component {
           </Thumbnail>
         </Col>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+1].image} href={"baseURL+/recipe?id="+recipes[i].id}>
+          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+1].image} href={baseURL+"/recipe?id="+recipes[i].id}>
             <p>{recipes[i+1].title}</p>
           </Thumbnail>
         </Col>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+2].image} href={"baseURL+/recipe?id="+recipes[i].id}>
+          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+2].image} href={baseURL+"/recipe?id="+recipes[i].id}>
             <p>{recipes[i+2].title}</p>
           </Thumbnail>
         </Col>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+3].image} href={"baseURL+/recipe?id="+recipes[i].id}>
+          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+3].image} href={baseURL+"/recipe?id="+recipes[i].id}>
             <p>{recipes[i+3].title}</p>
           </Thumbnail>
         </Col>
@@ -124,7 +124,7 @@ class Results extends Component {
 
       let remainingCols = recipes.slice(i).map( element => {
         return (<Col xs={3} md={3}>
-                  <Thumbnail style={customStyle} src={this.props.baseURL + element.image} href={"baseURL+/recipe?id="+element.id}>
+                  <Thumbnail style={customStyle} src={this.props.baseURL + element.image} href={baseURL+"/recipe?id="+element.id}>
                     <p>{element.title}</p>
                   </Thumbnail>
                 </Col>);

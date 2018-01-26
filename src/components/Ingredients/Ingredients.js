@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Panel, Button, Well } from "react-bootstrap";
+import { Panel, Button, Well, Grid, Col, Row } from "react-bootstrap";
+import CarouselBuidler from "../CarouselBuilder";
 import { Link } from "react-router-dom";
 import API from "../../utils/API";
 const queryString = require("query-string");
@@ -12,11 +13,12 @@ class Ingredients extends Component {
   };
 
   componentDidMount() {
+
     const params = queryString.parse(this.props.location.search);
-    console.log("params: " + JSON.stringify(params));
+
     API.getRecipe(params.id)
       .then( res => {
-        console.log(res);
+
         this.setState({
           items: res.data[0].extendedIngredients,
           instructions: res.data[0].instructions
@@ -35,6 +37,11 @@ class Ingredients extends Component {
         right: "15px"
       };
 
+      const wellStyle = {
+        marginLeft: "10px",
+        fontSize: "20px"
+      };
+
       return(
             <Panel bsStyle="primary">
               <Panel.Heading>
@@ -48,13 +55,29 @@ class Ingredients extends Component {
                 </div>
               </Panel.Heading>
               <Panel.Body>
+                <Grid>
+                <Row>
+                <Col xs={6}>
                 {this.state.items.map( element => {
-                  return (<Well key={element.name}>
-                    <i className="fa fa-circle-o" aria-hidden="true" style={{"marginRight": "5px"}}></i>
-                    {element.name}
-                  </Well>);
+                  return (
+                    <Row key={element.name}>
+                    <Col xs={4}>
+                      <CarouselBuidler ingredient={element.name}/>
+                      </Col>
+                      <Col xs={8}>
+                      <Well>
+                        <i className="fa fa-circle-o" aria-hidden="true"></i>
+                        <span style={wellStyle}>{element.name}</span>
+                      </Well>
+                      </Col>
+                    </Row>);
                 })}
-                <br/><h3><strong>Recipe: </strong></h3><br/><p>{this.state.instructions}</p>
+                </Col>
+                <Col xs={4}>
+                <h3><strong>Recipe: </strong></h3><br/><p>{this.state.instructions}</p>
+                </Col>
+                </Row>
+                </Grid>
               </Panel.Body>
             </Panel>);
   }

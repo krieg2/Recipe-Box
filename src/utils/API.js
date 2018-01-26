@@ -22,5 +22,11 @@ export default {
   	let url = "https://thawing-headland-90979.herokuapp.com/api/recipe/"+recipeId;
 
     return axios.get(url);
+  },
+  getProducts: function(ingredient) {
+
+    let url = "https://thawing-headland-90979.herokuapp.com/api/product/search/"+ingredient;
+
+    return axios.get(url);
   }
 };
