@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import { Panel, Button } from "react-bootstrap";
-
-// const customStyle = {
-// 	"background-color": "#20315A",
-// 	color: "white",
-// 	"text-align": "center",
-// 	"margin-top": "20px"
-// };
+import { Panel } from "react-bootstrap";
 
 class Cart extends Component {
 
@@ -22,7 +15,6 @@ class Cart extends Component {
                 <Panel.Title componentClass="h3">
                   <strong><i className="fa fa-shopping-cart"></i>  Shopping Cart   Total: </strong>
                   <span id="cart-total"></span>
-                  <Button bsStyle="default"> Hide </Button>
                 </Panel.Title>
               </Panel.Heading>
               <Panel.Body>

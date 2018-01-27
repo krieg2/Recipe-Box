@@ -6,7 +6,7 @@ const customStyle = {
     backgroundColor: "#20315A",
     color: "white",
     textAlign: "center",
-    marginTop: "150px",
+    marginTop: "80px",
     opacity: 0.85
 };
 

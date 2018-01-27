@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Panel, Button } from "react-bootstrap";
+import { Panel } from "react-bootstrap";
 
 class Favorites extends Component {
 
   state = {
-    recipes: [{}]
+    recipes: []
   };
 
   render() {
@@ -15,7 +15,6 @@ class Favorites extends Component {
                 <Panel.Title componentClass="h3">
                   <strong><i className="fa fa-star"></i>  Favorite Recipes</strong>
                   <span id="cart-total"></span>
-                  <Button bsStyle="default"> Back </Button>
                 </Panel.Title>
               </Panel.Heading>
               <Panel.Body>

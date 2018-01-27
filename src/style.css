@@ -13,3 +13,7 @@ ol.carousel-indicators {
   right: 0;
   width: auto;
 }
+
+.panel {
+  opacity: 0.92;
+}
