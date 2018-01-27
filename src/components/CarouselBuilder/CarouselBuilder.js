@@ -22,7 +22,8 @@ class CarouselBuilder extends Component {
           }
         })
         .catch( err => console.log(err));
-      }, 500, this.props.ingredient);
+
+      }, this.props.delay, this.props.ingredient);
   }
 
   render() {

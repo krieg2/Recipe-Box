@@ -42,6 +42,8 @@ class Ingredients extends Component {
         fontSize: "20px"
       };
 
+      let delay = 0;
+
       return(
             <Panel bsStyle="primary">
               <Panel.Heading>
@@ -59,10 +61,11 @@ class Ingredients extends Component {
                 <Row>
                   <Col xs={6}>
                   {this.state.items.map( element => {
+                    delay += 250;
                     return (
                       <Row key={element.name}>
                         <Col xs={4}>
-                          <CarouselBuidler ingredient={element.name}/>
+                          <CarouselBuidler ingredient={element.name} delay={delay}/>
                         </Col>
                         <Col xs={8}>
                           <Well>
