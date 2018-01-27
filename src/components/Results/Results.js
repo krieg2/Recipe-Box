@@ -5,23 +5,26 @@ const baseURL = "/Recipe-Box";
 class Results extends Component {
 
   state = {
-    allRecipes: [{}],
-    currentItems: [{}],
+    allRecipes: [],
+    currentItems: [],
     pageSize: 8,
     totalPages: 0,
-    currentPage: 1
+    currentPage: 1,
+    baseURL: ""
   };
 
-  componentWillMount() {
+  componentWillMount(){
     // Initialize the recipe array.
-    if (this.props.recipes && this.props.recipes.length > 0) {
+    let allRecipes = this.props.location.state.allRecipes;
+    if (allRecipes && allRecipes.length > 0) {
 
-      let total = Math.floor(this.props.recipes.length / this.state.pageSize);
-      total += (this.props.recipes.length % this.state.pageSize > 0) ? 1 : 0;
-      console.log("total pages:"+total);
+      let total = Math.floor(allRecipes.length / this.state.pageSize);
+      total += (allRecipes.length % this.state.pageSize > 0) ? 1 : 0;
+
       this.setState({
-        allRecipes: this.props.recipes,
-        currentItems: this.props.recipes.slice(0, this.state.pageSize),
+        allRecipes: allRecipes,
+        baseURL: this.props.location.state.baseURL,
+        currentItems: this.props.location.state.allRecipes.slice(0, this.state.pageSize),
         totalPages: total
       });
     }
@@ -98,22 +101,22 @@ class Results extends Component {
 
       result.push(<Row key={recipes[i].id}>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i].image} href={baseURL+"/recipe?id="+recipes[i].id}>
+          <Thumbnail style={customStyle} src={this.state.baseURL + recipes[i].image} href={baseURL+"/recipe?id="+recipes[i].id}>
             <p>{recipes[i].title}</p>
           </Thumbnail>
         </Col>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+1].image} href={baseURL+"/recipe?id="+recipes[i].id}>
+          <Thumbnail style={customStyle} src={this.state.baseURL + recipes[i+1].image} href={baseURL+"/recipe?id="+recipes[i].id}>
             <p>{recipes[i+1].title}</p>
           </Thumbnail>
         </Col>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+2].image} href={baseURL+"/recipe?id="+recipes[i].id}>
+          <Thumbnail style={customStyle} src={this.state.baseURL + recipes[i+2].image} href={baseURL+"/recipe?id="+recipes[i].id}>
             <p>{recipes[i+2].title}</p>
           </Thumbnail>
         </Col>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.props.baseURL + recipes[i+3].image} href={baseURL+"/recipe?id="+recipes[i].id}>
+          <Thumbnail style={customStyle} src={this.state.baseURL + recipes[i+3].image} href={baseURL+"/recipe?id="+recipes[i].id}>
             <p>{recipes[i+3].title}</p>
           </Thumbnail>
         </Col>
@@ -124,7 +127,7 @@ class Results extends Component {
 
       let remainingCols = recipes.slice(i).map( element => {
         return (<Col xs={3} md={3}>
-                  <Thumbnail style={customStyle} src={this.props.baseURL + element.image} href={baseURL+"/recipe?id="+element.id}>
+                  <Thumbnail style={customStyle} src={this.state.baseURL + element.image} href={baseURL+"/recipe?id="+element.id}>
                     <p>{element.title}</p>
                   </Thumbnail>
                 </Col>);
@@ -156,9 +159,9 @@ class Results extends Component {
                 <Row>
                   <Col xs={12} md={12}>
                     <ButtonGroup bsSize="small" style={buttonGrpStyle}>
-                      <Button onClick={this.prevPage} bsStyle="default">Previous Page</Button>
+                      <Button onClick={this.prevPage} bsStyle="default">Previous</Button>
                       {this.displayPageBtns()}
-                      <Button onClick={this.nextPage} bsStyle="default">Next Page</Button>
+                      <Button onClick={this.nextPage} bsStyle="default">Next</Button>
                     </ButtonGroup>
                   </Col>
                 </Row>

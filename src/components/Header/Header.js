@@ -1,16 +1,37 @@
 import React from "react";
-import { Jumbotron } from "react-bootstrap";
+import { Jumbotron, Navbar, Nav, NavItem, Grid, Row, Col } from "react-bootstrap";
 
 const customStyle = {
-	backgroundColor: "#20315A",
-	color: "white",
-	textAlign: "center",
-	marginTop: "20px"
+    fontFamily: "Arial, Helvetica, sans-serif",
+    backgroundColor: "#20315A",
+    color: "white",
+    textAlign: "center",
+    marginTop: "150px",
+    opacity: 0.85
 };
 
 const Header = () =>
-  <Jumbotron style={customStyle}>
-    <h1><strong><i className="fa fa-list-alt"></i>  Recipe Box</strong></h1>
-  </Jumbotron>;
+  <div>
+    <Navbar style={{opacity: 0.75}} fixedTop={true}>
+      <Nav>
+        <NavItem eventKey={1} href="/Recipe-Box/">
+          Home / Search
+        </NavItem>
+        <NavItem eventKey={2} href="/Recipe-Box/favorites">
+          Favorites
+        </NavItem>
+        <NavItem eventKey={3} href="/Recipe-Box/cart">
+          Cart
+        </NavItem>
+      </Nav>
+    </Navbar>
+    <Row>
+      <Col xs={12} md={12}>
+        <Jumbotron style={customStyle}>
+          <h1><i className="fa fa-list-alt"></i>  Recipe Box</h1>
+        </Jumbotron>
+      </Col>
+    </Row>
+  </div>;
 
 export default Header;

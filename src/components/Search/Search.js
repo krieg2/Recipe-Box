@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Results from "../Results";
+import { Redirect } from "react-router-dom";
 import API from "../../utils/API";
 import { Panel, FormGroup, Button,
          ControlLabel, FormControl,
@@ -25,8 +25,7 @@ class Search extends Component {
 
     API.searchRecipes(this.state.searchText, this.state.cuisine, this.state.typeRadio)
     .then( searchResults => {
-      //console.log(searchResults);
-      //console.log(searchResults.data.results);
+
       this.setState({
         results: searchResults.data.results,
         baseURL: searchResults.data.baseUri
@@ -53,7 +52,10 @@ class Search extends Component {
 
     return(
       (this.state.results.length > 0) ?
-        <Results baseURL={this.state.baseURL} recipes={this.state.results}/>
+        <Redirect to={{
+          pathname: '/results',
+          state: { allRecipes: this.state.results, baseURL: this.state.baseURL }
+        }}/>
       :
         <Panel bsStyle="primary">
         <Panel.Heading>

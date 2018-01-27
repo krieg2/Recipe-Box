@@ -48,36 +48,37 @@ class Ingredients extends Component {
                 <Panel.Title componentClass="h3">
                   <strong><i className="fa fa-list-alt"></i>  Ingredients</strong>
                   <span id="cart-total"></span>
-                  <Link to="/"><Button bsSize="small" bsStyle="default" style={buttonStyle}>Back</Button></Link>
+                  <Button onClick={this.props.history.goBack} bsSize="small" bsStyle="default" style={buttonStyle}>Back</Button>
                 </Panel.Title>
                 <div>
                   <i id="star" className="fa fa-star-o" aria-hidden="true">  Favorite</i>
                 </div>
               </Panel.Heading>
               <Panel.Body>
-                <Grid>
+              <Grid>
                 <Row>
-                <Col xs={6}>
-                {this.state.items.map( element => {
-                  return (
-                    <Row key={element.name}>
-                    <Col xs={4}>
-                      <CarouselBuidler ingredient={element.name}/>
-                      </Col>
-                      <Col xs={8}>
-                      <Well>
-                        <i className="fa fa-circle-o" aria-hidden="true"></i>
-                        <span style={wellStyle}>{element.name}</span>
-                      </Well>
-                      </Col>
-                    </Row>);
-                })}
-                </Col>
-                <Col xs={4}>
-                <h3><strong>Recipe: </strong></h3><br/><p>{this.state.instructions}</p>
-                </Col>
+                  <Col xs={6}>
+                  {this.state.items.map( element => {
+                    return (
+                      <Row key={element.name}>
+                        <Col xs={4}>
+                          <CarouselBuidler ingredient={element.name}/>
+                        </Col>
+                        <Col xs={8}>
+                          <Well>
+                            <i className="fa fa-circle-o" aria-hidden="true"></i>
+                            <span style={wellStyle}>{element.name}</span>
+                          </Well>
+                        </Col>
+                      </Row>);
+                  })}
+                  </Col>
+                  <Col xs={4}>
+                    <h3><strong>Recipe: </strong></h3>
+                    <p>{this.state.instructions}</p>
+                  </Col>
                 </Row>
-                </Grid>
+              </Grid>
               </Panel.Body>
             </Panel>);
   }
