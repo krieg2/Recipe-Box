@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Panel, Thumbnail, Row, Col, Button, ButtonGroup } from "react-bootstrap";
+import { Panel, Thumbnail, Row, Col, Pagination } from "react-bootstrap";
 const baseURL = "/Recipe-Box";
 
 class Results extends Component {
@@ -76,10 +76,10 @@ class Results extends Component {
 
     let result = [];
     for(let i=1; i <= this.state.totalPages; i++){
-      result.push(<Button onClick={ () => this.setPage(i) }
+      result.push(<Pagination.Item onClick={ () => this.setPage(i) }
                    bsStyle="default"
                    disabled={(this.state.currentPage === i) ? true : false}
-                   >{i}</Button>);
+                   >{i}</Pagination.Item>);
     }
 
     return(result)
@@ -145,7 +145,8 @@ class Results extends Component {
 
       const buttonGrpStyle = {
         float: "right",
-        marginBottom: "25px"
+        marginBottom: "25px",
+        marginTop: "0px"
       };
 
       return(
@@ -158,11 +159,11 @@ class Results extends Component {
               <Panel.Body>
                 <Row>
                   <Col xs={12} md={12}>
-                    <ButtonGroup bsSize="small" style={buttonGrpStyle}>
-                      <Button onClick={this.prevPage} bsStyle="default">Previous</Button>
+                    <Pagination bsSize="small" style={buttonGrpStyle}>
+                      <Pagination.Prev onClick={this.prevPage} bsStyle="default">Previous</Pagination.Prev>
                       {this.displayPageBtns()}
-                      <Button onClick={this.nextPage} bsStyle="default">Next</Button>
-                    </ButtonGroup>
+                      <Pagination.Next onClick={this.nextPage} bsStyle="default">Next</Pagination.Next>
+                    </Pagination>
                   </Col>
                 </Row>
                 {this.displayRecipes()}
