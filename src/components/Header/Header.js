@@ -1,5 +1,5 @@
 import React from "react";
-import { Jumbotron, Navbar, Nav, NavItem, Grid, Row, Col, Clearfix } from "react-bootstrap";
+import { Jumbotron, Navbar, Nav, NavItem, Row, Col, Clearfix } from "react-bootstrap";
 
 const customStyle = {
     fontFamily: "Arial, Helvetica, sans-serif",

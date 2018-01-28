@@ -14,7 +14,7 @@ import './App.css';
 class App extends Component {
   render() {
     return (
-      <Grid>
+      <Grid fluid={true}>
         <Header />
         <Router basename="/Recipe-Box">
           <Row>
