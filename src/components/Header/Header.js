@@ -12,8 +12,8 @@ const customStyle = {
 
 const Header = () =>
   <div>
-    <Navbar style={{opacity: 0.75}} fixedTop={true}>
-      <Nav bsStyle="tabs" justified={true}>
+    <Navbar style={{opacity: 0.75, textAlign: "center"}} fixedTop={true}>
+      <Nav bsStyle="tabs" justified>
         <NavItem eventKey={1} href="/Recipe-Box/">
           Home / Search
         </NavItem>
