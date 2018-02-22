@@ -1,6 +1,6 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { Panel, Col, Thumbnail } from "react-bootstrap";
-const baseURL = "/Recipe-Box";
 
 class Favorites extends Component {
 
@@ -8,12 +8,22 @@ class Favorites extends Component {
     recipes: []
   };
 
+  componentDidMount(){
+
+    this.populateRecipes(this.props);
+  }
+
   componentWillReceiveProps(nextProps){
 
-    if(nextProps.fb.auth().currentUser){
+    this.setState({recipes: []}, () => this.populateRecipes(nextProps)); 
+  }
 
-      let userId = nextProps.fb.auth().currentUser.uid;
-      let dbRef = nextProps.fb.database().ref('/users/'+userId+'/favorites')
+  populateRecipes = (props) => {
+
+    if(props.fb.auth().currentUser){
+
+      let userId = props.fb.auth().currentUser.uid;
+      let dbRef = props.fb.database().ref('/users/'+userId+'/favorites')
 
       dbRef.on('value', (snapshot) => {
 
@@ -28,10 +38,8 @@ class Favorites extends Component {
 
         this.setState({recipes: recipes});
       });  
-    } else{
-      this.setState({recipes: []});
     }
-  }
+  };
 
   render() {
 
@@ -51,9 +59,11 @@ class Favorites extends Component {
         <Panel.Body>
           {this.state.recipes.map( (element, index) => {
               return (<Col xs={3} md={3} key={index}>
-                <Thumbnail style={customStyle} src={element.image} href={baseURL+"/recipe?id="+element.recipeId}>
-                  <p>{element.title}</p>
-                </Thumbnail>
+                <Link to={"/recipe?id="+element.recipeId}>
+                  <Thumbnail style={customStyle} src={element.image}>
+                    <p>{element.title}</p>
+                  </Thumbnail>
+                </Link>
               </Col>);
             })
           }

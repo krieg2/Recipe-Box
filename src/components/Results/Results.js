@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { Panel, Thumbnail, Row, Col, Pagination } from "react-bootstrap";
 const baseURL = "/Recipe-Box";
 
@@ -101,24 +102,32 @@ class Results extends Component {
 
       result.push(<Row key={recipes[i].id}>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.state.baseURL + recipes[i].image} href={baseURL+"/recipe?id="+recipes[i].id}>
-            <p>{recipes[i].title}</p>
-          </Thumbnail>
+          <Link to={"/recipe?id="+recipes[i].id}>
+            <Thumbnail style={customStyle} src={this.state.baseURL + recipes[i].image}>
+              <p>{recipes[i].title}</p>
+            </Thumbnail>
+          </Link>
         </Col>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.state.baseURL + recipes[i+1].image} href={baseURL+"/recipe?id="+recipes[i].id}>
-            <p>{recipes[i+1].title}</p>
-          </Thumbnail>
+          <Link to={"/recipe?id="+recipes[i+1].id}>
+            <Thumbnail style={customStyle} src={this.state.baseURL + recipes[i+1].image}>
+              <p>{recipes[i+1].title}</p>
+            </Thumbnail>
+          </Link>
         </Col>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.state.baseURL + recipes[i+2].image} href={baseURL+"/recipe?id="+recipes[i].id}>
-            <p>{recipes[i+2].title}</p>
-          </Thumbnail>
+          <Link to={"/recipe?id="+recipes[i+2].id}>
+            <Thumbnail style={customStyle} src={this.state.baseURL + recipes[i+2].image}>
+              <p>{recipes[i+2].title}</p>
+            </Thumbnail>
+          </Link>
         </Col>
         <Col xs={3} md={3}>
-          <Thumbnail style={customStyle} src={this.state.baseURL + recipes[i+3].image} href={baseURL+"/recipe?id="+recipes[i].id}>
-            <p>{recipes[i+3].title}</p>
-          </Thumbnail>
+          <Link to={"/recipe?id="+recipes[i+3].id}>
+            <Thumbnail style={customStyle} src={this.state.baseURL + recipes[i+3].image}>
+              <p>{recipes[i+3].title}</p>
+            </Thumbnail>
+          </Link>
         </Col>
       </Row>);
     }
@@ -126,11 +135,14 @@ class Results extends Component {
     if(i <= recipes.length-1){
 
       let remainingCols = recipes.slice(i).map( element => {
-        return (<Col xs={3} md={3}>
-                  <Thumbnail style={customStyle} src={this.state.baseURL + element.image} href={baseURL+"/recipe?id="+element.id}>
-                    <p>{element.title}</p>
-                  </Thumbnail>
-                </Col>);
+        return (
+          <Col xs={3} md={3}>
+            <Link to={"/recipe?id="+element.id}>
+              <Thumbnail style={customStyle} src={this.state.baseURL + element.image}>
+                <p>{element.title}</p>
+              </Thumbnail>
+            </Link>
+          </Col>);
       });
 
       result.push(<Row key={recipes[i].id}>
