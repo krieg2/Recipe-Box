@@ -19,32 +19,34 @@ const linkStyle = {
 
 const Header = (props) => 
   (<div>
-    <Navbar style={{opacity: 0.75, textAlign: "center"}} fixedTop={true}>
-      <Nav bsStyle="tabs" justified>
-        <NavItem eventKey={1}>
-           <Link to="/" style={linkStyle}>Home / Search</Link>
-        </NavItem>
-        <NavItem eventKey={2}>
-          <Link to="/favorites" style={linkStyle}>Favorites</Link>
-        </NavItem>
-        <NavItem eventKey={3}>
-          <Link to="/cart" style={linkStyle}>Cart</Link>
-        </NavItem>
-        {props.signedin ?
-          <NavItem eventKey={4} onClick={() => props.fb.auth().signOut()}>
-            Logout
-          </NavItem>          
-        :
-          <NavItem eventKey={4}>
-            <Link to="/login" style={linkStyle}>Login</Link>
+    <Row>
+      <Navbar style={{opacity: 0.75, textAlign: "center"}} fixedTop={true}>
+        <Nav bsStyle="tabs" justified>
+          <NavItem eventKey={1}>
+            <Link to="/" style={linkStyle}>Home / Search</Link>
           </NavItem>
-        }
-      </Nav>
-    </Navbar>
+          <NavItem eventKey={2}>
+            <Link to="/favorites" style={linkStyle}>Favorites</Link>
+          </NavItem>
+          <NavItem eventKey={3}>
+            <Link to="/cart" style={linkStyle}>Cart</Link>
+          </NavItem>
+          {props.signedin ?
+            <NavItem eventKey={4} onClick={() => props.fb.auth().signOut()}>
+              Logout
+            </NavItem>          
+          :
+            <NavItem eventKey={4}>
+              <Link to="/login" style={linkStyle}>Login</Link>
+            </NavItem>
+          }
+        </Nav>
+      </Navbar>
+    </Row>
     <Row>
       <Col xs={12} md={12}>
         <Clearfix visibleXsBlock>
-          <Row style={{minHeight: "100px"}}>
+          <Row style={{minHeight: "150px"}}>
           </Row>
         </Clearfix>
         <Jumbotron style={customStyle}>
@@ -52,6 +54,7 @@ const Header = (props) =>
         </Jumbotron>
       </Col>
     </Row>
-  </div>);
+   </div>
+  );
 
 export default Header;
