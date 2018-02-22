@@ -10,7 +10,7 @@ const customStyle = {
     opacity: 0.85
 };
 
-const Header = () =>
+const Header = (props) =>
   <div>
     <Navbar style={{opacity: 0.75, textAlign: "center"}} fixedTop={true}>
       <Nav bsStyle="tabs" justified>
@@ -23,6 +23,15 @@ const Header = () =>
         <NavItem eventKey={3} href="/Recipe-Box/cart">
           Cart
         </NavItem>
+        {props.fb.auth().currentUser ?
+          <NavItem eventKey={4} onClick={() => props.fb.auth().signOut()}>
+            Logout
+          </NavItem>          
+        :
+          <NavItem eventKey={4} href="/Recipe-Box/login">
+            Login
+          </NavItem>
+        }
       </Nav>
     </Navbar>
     <Row>

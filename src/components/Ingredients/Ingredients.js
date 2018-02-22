@@ -1,31 +1,53 @@
 import React, { Component } from "react";
 import { Panel, Button, Well, Grid, Col, Row } from "react-bootstrap";
 import CarouselBuidler from "../CarouselBuilder";
-import { Link } from "react-router-dom";
 import API from "../../utils/API";
 const queryString = require("query-string");
 
 class Ingredients extends Component {
 
   state = {
+    recipeId: '',
+    image: '',
+    title: '',
+    isFavorite: false,
     items: [],
-    instructions: ""
+    instructions: ''
   };
 
   componentDidMount() {
 
     const params = queryString.parse(this.props.location.search);
 
-    API.getRecipe(params.id)
-      .then( res => {
+    this.setState({recipeId: params.id});
 
-        this.setState({
-          items: res.data[0].extendedIngredients,
-          instructions: res.data[0].instructions
-        });
-      })
-      .catch( err => console.log(err));
+    API.getRecipe(params.id)
+    .then( res => {
+
+      this.setState({
+        items: res.data[0].extendedIngredients,
+        instructions: res.data[0].instructions,
+        image: res.data[0].image,
+        title: res.data[0].title
+      });
+    })
+    .catch( err => console.log(err));
   }
+
+  addFavorite = () => {
+
+    let recipeId = this.state.recipeId;
+    let userId = this.props.fb.auth().currentUser.uid;
+
+    this.props.fb.database().ref('/users/'+userId+'/favorites/'+recipeId).set({
+      recipeId: recipeId,
+      image: this.state.image,
+      title: this.state.title,
+      timeStamp : this.props.fb.database.ServerValue.TIMESTAMP
+    });
+
+    this.setState({isFavorite: true});
+  };
 
   render() {
 
@@ -42,6 +64,15 @@ class Ingredients extends Component {
         fontSize: "20px"
       };
 
+      const starStyle = {
+        cursor: "pointer"
+      };
+      if(this.state.isFavorite){
+        starStyle.color = "gold";
+      } else{
+        starStyle.color = "white";
+      }
+
       let delay = 0;
 
       return(
@@ -53,7 +84,8 @@ class Ingredients extends Component {
                   <Button onClick={this.props.history.goBack} bsSize="small" bsStyle="default" style={buttonStyle}>Back</Button>
                 </Panel.Title>
                 <div>
-                  <i id="star" className="fa fa-star-o" aria-hidden="true">  Favorite</i>
+                  <i id="star" className={this.state.isFavorite ? 'fa fa-star' : 'fa fa-star-o'}
+                     aria-hidden="true" onClick={this.addFavorite} style={starStyle}>&nbsp;&nbsp;Favorite</i>
                 </div>
               </Panel.Heading>
               <Panel.Body>

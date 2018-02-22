@@ -10,7 +10,7 @@ class Results extends Component {
     pageSize: 8,
     totalPages: 0,
     currentPage: 1,
-    baseURL: ""
+    baseURL: ''
   };
 
   componentWillMount(){
