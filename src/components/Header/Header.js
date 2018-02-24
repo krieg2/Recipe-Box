@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Jumbotron, Navbar, Nav, NavItem,
-         Row, Col, Clearfix } from "react-bootstrap";
+         Row, Col, Clearfix, Badge } from "react-bootstrap";
 
 const customStyle = {
   fontFamily: "Arial, Helvetica, sans-serif",
@@ -17,8 +17,8 @@ const linkStyle = {
   color: "#777"
 };
 
-const Header = (props) => 
-  (<div>
+const Header = (props) => (
+  <div>
     <Row>
       <Navbar style={{opacity: 0.75, textAlign: "center"}} fixedTop={true}>
         <Nav bsStyle="tabs" justified>
@@ -27,9 +27,19 @@ const Header = (props) =>
           </NavItem>
           <NavItem eventKey={2}>
             <Link to="/favorites" style={linkStyle}>Favorites</Link>
+            {props.signedin ?
+              <Badge style={{marginLeft: "10px"}}>{props.favorites}</Badge>
+            :
+              null
+            }
           </NavItem>
           <NavItem eventKey={3}>
             <Link to="/cart" style={linkStyle}>Cart</Link>
+            {props.signedin ?
+              <Badge style={{marginLeft: "10px"}}>{props.cart}</Badge>
+            :
+              null
+            }
           </NavItem>
           {props.signedin ?
             <NavItem eventKey={4} onClick={() => props.fb.auth().signOut()}>
@@ -54,7 +64,7 @@ const Header = (props) =>
         </Jumbotron>
       </Col>
     </Row>
-   </div>
-  );
+  </div>
+);
 
 export default Header;

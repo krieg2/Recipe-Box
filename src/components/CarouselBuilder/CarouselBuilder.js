@@ -30,22 +30,36 @@ class CarouselBuilder extends Component {
 
     const carouselStyle = {
       marginBottom: "10px",
-      minWidth: "100px"
+      minWidth: "100px",
+      padding: "5px"
     };
 
     const captionStyle = {
+      position: "absolute",
+      bottom: "0px",
+      lineHeight: "16px",
       fontSize: "16px",
       textShadow: "3px 3px 10px #000000, -3px -2px 5px #000000"
+    };
+
+    const priceStyle = {
+      position: "absolute",
+      bottom: "8px"
     }
 
     return(<Carousel style={carouselStyle} interval={null}>
            {this.state.items.map( element => {
-             return(<Carousel.Item key={element.name}>
-                      <span>${element.salePrice}</span>
+             return(<Carousel.Item key={element.name}
+                     style={{cursor: "pointer"}}
+                     onClick={() => this.props.addToCart(element.name,
+                                                         element.salePrice,
+                                                         element.thumbnailImage)}
+                    >
                       <img width={200} height={200} alt="200x200" src={element.thumbnailImage} />
                       <Carousel.Caption>
                         <h2 style={captionStyle}>{element.name}</h2>
                       </Carousel.Caption>
+                      <div style={priceStyle}>${element.salePrice}</div>
                     </Carousel.Item>
              )}
            )}

@@ -21,6 +21,8 @@ class Ingredients extends Component {
 
     this.setState({recipeId: params.id});
 
+    let isFavorite = this.props.checkIsFavorite(params.id);
+
     API.getRecipe(params.id)
     .then( res => {
 
@@ -28,7 +30,8 @@ class Ingredients extends Component {
         items: res.data[0].extendedIngredients,
         instructions: res.data[0].instructions,
         image: res.data[0].image,
-        title: res.data[0].title
+        title: res.data[0].title,
+        isFavorite: isFavorite
       });
     })
     .catch( err => console.log(err));
@@ -47,6 +50,18 @@ class Ingredients extends Component {
     });
 
     this.setState({isFavorite: true});
+  };
+
+  addToCart = (name, price, image) => {
+
+    let userId = this.props.fb.auth().currentUser.uid;
+
+    this.props.fb.database().ref('/users/'+userId+'/cart').push({
+      name: name,
+      price: price,
+      image: image,
+      timeStamp : this.props.fb.database.ServerValue.TIMESTAMP
+    });
   };
 
   render() {
@@ -97,7 +112,7 @@ class Ingredients extends Component {
                     return (
                       <Row key={element.name}>
                         <Col xs={4}>
-                          <CarouselBuidler ingredient={element.name} delay={delay}/>
+                          <CarouselBuidler ingredient={element.name} delay={delay} addToCart={this.addToCart} />
                         </Col>
                         <Col xs={8}>
                           <Well>

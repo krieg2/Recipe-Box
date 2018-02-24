@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Panel, Thumbnail, Row, Col, Pagination } from "react-bootstrap";
-const baseURL = "/Recipe-Box";
 
 class Results extends Component {
 

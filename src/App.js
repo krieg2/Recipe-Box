@@ -39,6 +39,8 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
+      favorites: [],
+      cart: [],
       signedIn: false // Local signed-in state.
     };
     firebase.initializeApp(config);
@@ -46,9 +48,70 @@ class App extends Component {
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(
-      (user) => this.setState({signedIn: !!user})
+      (user) => {
+
+        if(user){
+          this.populateFavorites();
+          this.populateCart();
+        } else{
+          this.setState({
+            favorites: [],
+            cart: []
+          });
+        }
+        this.setState({signedIn: !!user});
+      }
     );
   }
+
+  populateFavorites = () => {
+
+    let userId = firebase.auth().currentUser.uid;
+    let dbRef = firebase.database().ref('/users/'+userId+'/favorites');
+
+    dbRef.on('value', (snapshot) => {
+
+      let val = snapshot.val();
+      let favorites = [];
+      for(const recipeId in val) {
+
+        if(val.hasOwnProperty(recipeId)) {
+          favorites.push(val[recipeId]);
+        }
+      }
+
+      this.setState({favorites: favorites});
+    });  
+  };
+
+  populateCart = () => {
+
+    let userId = firebase.auth().currentUser.uid;
+    let dbRef = firebase.database().ref('/users/'+userId+'/cart');
+
+    dbRef.on('value', (snapshot) => {
+
+      let val = snapshot.val();
+      let items = [];
+      for(const itemId in val) {
+
+        if(val.hasOwnProperty(itemId)) {
+          let item = val[itemId];
+          item.id = itemId;
+          items.push(item);
+        }
+      }
+
+      this.setState({cart: items});
+    });  
+  };
+
+  checkIsFavorite = (recipeId) => {
+
+    let found = this.state.favorites.find((e) => e.recipeId === recipeId) ? true : false;
+
+    return found;
+  };
 
   render() {
     return (
@@ -56,15 +119,17 @@ class App extends Component {
         <Router basename="/Recipe-Box">
           <Row>
             <Col xs={12} md={12}>
-              <Header fb={firebase} signedin={this.state.signedIn} />
+              <Header fb={firebase} signedin={this.state.signedIn}
+                      favorites={this.state.favorites.length}
+                      cart={this.state.cart.length} />
             </Col>
             <Col xs={12} md={12}>
               <Switch>
                 <Route exact path="/" component={Search} />
                 <Route exact path="/results" component={Results} />
-                <Route exact path="/cart" component={Cart} />
-                <Route exact path="/favorites" render={(props) => <Favorites fb={firebase} {...props} />} />
-                <Route exact path="/recipe" render={(props) => <Ingredients fb={firebase} {...props} />} />
+                <Route exact path="/cart" render={(props) => <Cart fb={firebase} items={this.state.cart} {...props} />} />
+                <Route exact path="/favorites" render={(props) => <Favorites fb={firebase} favorites={this.state.favorites} {...props} />} />
+                <Route exact path="/recipe" render={(props) => <Ingredients fb={firebase} checkIsFavorite={this.checkIsFavorite} {...props} />} />
                 <Route exact path="/login" render={(props) => <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} {...props}/>} />
                 <Route component={NoMatch} />
               </Switch>
