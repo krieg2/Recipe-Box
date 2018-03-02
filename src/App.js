@@ -41,6 +41,7 @@ class App extends Component {
     this.state = {
       favorites: [],
       cart: [],
+      totalPrice: 0,
       signedIn: false // Local signed-in state.
     };
     firebase.initializeApp(config);
@@ -56,7 +57,8 @@ class App extends Component {
         } else{
           this.setState({
             favorites: [],
-            cart: []
+            cart: [],
+            totalPrice: 0
           });
         }
         this.setState({signedIn: !!user});
@@ -93,16 +95,21 @@ class App extends Component {
 
       let val = snapshot.val();
       let items = [];
+      let totalPrice = 0;
       for(const itemId in val) {
 
         if(val.hasOwnProperty(itemId)) {
           let item = val[itemId];
           item.id = itemId;
+          totalPrice += parseFloat(item.price);
           items.push(item);
         }
       }
 
-      this.setState({cart: items});
+      this.setState({
+        cart: items,
+        totalPrice: totalPrice
+      });
     });  
   };
 
@@ -127,7 +134,7 @@ class App extends Component {
               <Switch>
                 <Route exact path="/" component={Search} />
                 <Route exact path="/results" component={Results} />
-                <Route exact path="/cart" render={(props) => <Cart fb={firebase} items={this.state.cart} {...props} />} />
+                <Route exact path="/cart" render={(props) => <Cart fb={firebase} total={this.state.totalPrice} items={this.state.cart} {...props} />} />
                 <Route exact path="/favorites" render={(props) => <Favorites fb={firebase} favorites={this.state.favorites} {...props} />} />
                 <Route exact path="/recipe" render={(props) => <Ingredients fb={firebase} checkIsFavorite={this.checkIsFavorite} {...props} />} />
                 <Route exact path="/login" render={(props) => <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} {...props}/>} />

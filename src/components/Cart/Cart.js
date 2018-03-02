@@ -19,6 +19,12 @@ const buttonStyle = {
   cursor: "pointer"
 };
 
+const priceStyle = {
+  position: "absolute",
+  top: "10px",
+  right: "30px"
+};
+
 const tooltip = (<Tooltip id="tooltip">
     Remove
   </Tooltip>);
@@ -28,7 +34,7 @@ const Cart = (props) => (
     <Panel.Heading>
       <Panel.Title componentClass="h3">
         <strong><i className="fa fa-shopping-cart"></i>&nbsp;&nbsp;Shopping Cart</strong>
-        <span id="cart-total"></span>
+        <span style={priceStyle}>Total:&nbsp;${props.total.toFixed(2)}</span>
       </Panel.Title>
     </Panel.Heading>
     <Panel.Body>
