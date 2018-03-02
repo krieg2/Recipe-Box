@@ -3,6 +3,7 @@ import { Panel, Button, Well, Image,
          Grid, Col, Row } from "react-bootstrap";
 import CarouselBuidler from "../CarouselBuilder";
 import API from "../../utils/API";
+import sweetalert from "sweetalert";
 const queryString = require("query-string");
 
 class Ingredients extends Component {
@@ -53,6 +54,8 @@ class Ingredients extends Component {
       });
 
       this.setState({isFavorite: true});
+    } else{
+      sweetalert("Log in to add favorites.");
     }
   };
 
@@ -67,7 +70,12 @@ class Ingredients extends Component {
         price: price,
         image: image,
         timeStamp : this.props.fb.database.ServerValue.TIMESTAMP
+      })
+      .then(() => {
+        sweetalert("Added.", `Item was added to your cart. \n\n ${name}`, "success");
       });
+    } else{
+      sweetalert("Log in to add items to your cart.");
     }
   };
 
@@ -104,7 +112,7 @@ class Ingredients extends Component {
       return(
             <Panel bsStyle="primary">
               <Panel.Heading>
-                <Panel.Title componentClass="h3">
+                <Panel.Title componentClass="div">
                   <strong><i className="fa fa-list-alt"></i>&nbsp;&nbsp;Ingredients</strong>
                   <h2 style={{textAlign: "center"}}>{this.state.title}</h2>
                   <Button onClick={this.props.history.goBack} bsSize="small" bsStyle="default" style={buttonStyle}>Back</Button>

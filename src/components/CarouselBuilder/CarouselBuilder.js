@@ -33,8 +33,6 @@ class CarouselBuilder extends Component {
       textAlign: "center",
       border: "1px solid #ddd",
       borderRadius: "10px",
-      webkitBorderRadius: "10px",
-      mozBorderRadius: "10px",
       overflow: "hidden"
     };
 
@@ -50,8 +48,6 @@ class CarouselBuilder extends Component {
       backgroundColor: "white",
       fontSize: "14px",
       borderRadius: "10px",
-      webkitBorderRadius: "10px",
-      mozBorderRadius: "10px",
       padding: "2px",
       position: "absolute",
       top: "2px",
@@ -60,23 +56,24 @@ class CarouselBuilder extends Component {
 
     const imageStyle = {
       border: "1px solid #ddd",
-      borderRadius: "10px",
-      webkitBorderRadius: "10px",
-      mozBorderRadius: "10px"
+      borderRadius: "10px"
     };
 
     return(<Carousel style={carouselStyle} interval={null}>
            {this.state.items.map( element => {
-             return(<Carousel.Item key={element.name}
+             return(<Carousel.Item
+                     key={element.name}
                      style={{cursor: "pointer"}}
                      onClick={() => this.props.addToCart(element.name,
                                                          element.salePrice,
                                                          element.thumbnailImage)}
                     >
+                    
                       <img width={300} height={300} alt="300x300"
                            src={element.thumbnailImage}
                            style={imageStyle}
                       />
+                      
                       <Carousel.Caption>
                         <h2 style={captionStyle}>{element.name}</h2>
                       </Carousel.Caption>
