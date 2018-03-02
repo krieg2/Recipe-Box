@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Panel, Button, Well, Grid, Col, Row } from "react-bootstrap";
+import { Panel, Button, Well, Image,
+         Grid, Col, Row } from "react-bootstrap";
 import CarouselBuidler from "../CarouselBuilder";
 import API from "../../utils/API";
 const queryString = require("query-string");
@@ -79,6 +80,10 @@ class Ingredients extends Component {
         fontSize: "20px"
       };
 
+      const imageStyle = {
+        border: "2.5px solid grey"
+      };
+
       const starStyle = {
         cursor: "pointer"
       };
@@ -94,8 +99,8 @@ class Ingredients extends Component {
             <Panel bsStyle="primary">
               <Panel.Heading>
                 <Panel.Title componentClass="h3">
-                  <strong><i className="fa fa-list-alt"></i>  Ingredients</strong>
-                  <span id="cart-total"></span>
+                  <strong><i className="fa fa-list-alt"></i>&nbsp;&nbsp;Ingredients</strong>
+                  <h2 style={{textAlign: "center"}}>{this.state.title}</h2>
                   <Button onClick={this.props.history.goBack} bsSize="small" bsStyle="default" style={buttonStyle}>Back</Button>
                 </Panel.Title>
                 <div>
@@ -123,9 +128,10 @@ class Ingredients extends Component {
                       </Row>);
                   })}
                   </Col>
-                  <Col xs={4}>
+                  <Col xs={6}>
+                    <Image src={this.state.image} style={imageStyle} responsive rounded />
                     <h3><strong>Recipe: </strong></h3>
-                    <p>{this.state.instructions}</p>
+                    <p id="recipeInstructions">{this.state.instructions}</p>
                   </Col>
                 </Row>
               </Grid>

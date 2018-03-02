@@ -33,6 +33,8 @@ class CarouselBuilder extends Component {
       textAlign: "center",
       border: "1px solid #ddd",
       borderRadius: "10px",
+      webkitBorderRadius: "10px",
+      mozBorderRadius: "10px",
       overflow: "hidden"
     };
 
@@ -45,10 +47,23 @@ class CarouselBuilder extends Component {
     };
 
     const priceStyle = {
+      backgroundColor: "white",
+      fontSize: "14px",
+      borderRadius: "10px",
+      webkitBorderRadius: "10px",
+      mozBorderRadius: "10px",
+      padding: "2px",
       position: "absolute",
-      bottom: "10px",
-      textShadow: "0.5px 0.5px 1px white, -0.5px -0.5px 1px white"
+      top: "2px",
+      left: "4px"
     }
+
+    const imageStyle = {
+      border: "1px solid #ddd",
+      borderRadius: "10px",
+      webkitBorderRadius: "10px",
+      mozBorderRadius: "10px"
+    };
 
     return(<Carousel style={carouselStyle} interval={null}>
            {this.state.items.map( element => {
@@ -60,11 +75,12 @@ class CarouselBuilder extends Component {
                     >
                       <img width={300} height={300} alt="300x300"
                            src={element.thumbnailImage}
+                           style={imageStyle}
                       />
                       <Carousel.Caption>
                         <h2 style={captionStyle}>{element.name}</h2>
                       </Carousel.Caption>
-                      <p style={priceStyle}>${element.salePrice}</p>
+                      <div style={priceStyle}>${element.salePrice.toFixed(2)}</div>
                     </Carousel.Item>
              )}
            )}

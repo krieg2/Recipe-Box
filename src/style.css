@@ -14,6 +14,25 @@ ol.carousel-indicators {
   width: auto;
 }
 
+ol.carousel-indicators {
+  background-color: #337ab7;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+}
+
 .panel {
   opacity: 0.92;
+}
+
+.carousel-control {
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+}
+
+#recipeInstructions {
+  letter-spacing: .2rem;
+  line-height: 2em;
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
 }
