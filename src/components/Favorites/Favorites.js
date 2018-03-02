@@ -16,7 +16,7 @@ const removeFavorite = (firebase, id) => {
 const buttonStyle = {
   cursor: "pointer",
   position: "absolute",
-  left: "20px",
+  right: "20px",
   top: "5px"
 };
 

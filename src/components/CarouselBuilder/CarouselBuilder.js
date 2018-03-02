@@ -29,22 +29,25 @@ class CarouselBuilder extends Component {
   render() {
 
     const carouselStyle = {
-      marginBottom: "10px",
-      minWidth: "100px",
-      padding: "5px"
+      marginBottom: "5px",
+      textAlign: "center",
+      border: "1px solid #ddd",
+      borderRadius: "10px",
+      overflow: "hidden"
     };
 
     const captionStyle = {
       position: "absolute",
       bottom: "0px",
-      lineHeight: "16px",
-      fontSize: "16px",
-      textShadow: "3px 3px 10px #000000, -3px -2px 5px #000000"
+      lineHeight: "14px",
+      fontSize: "14px",
+      textShadow: "3px 3px 10px black, -3px -2px 5px black"
     };
 
     const priceStyle = {
       position: "absolute",
-      bottom: "8px"
+      bottom: "10px",
+      textShadow: "0.5px 0.5px 1px white, -0.5px -0.5px 1px white"
     }
 
     return(<Carousel style={carouselStyle} interval={null}>
@@ -55,11 +58,13 @@ class CarouselBuilder extends Component {
                                                          element.salePrice,
                                                          element.thumbnailImage)}
                     >
-                      <img width={200} height={200} alt="200x200" src={element.thumbnailImage} />
+                      <img width={300} height={300} alt="300x300"
+                           src={element.thumbnailImage}
+                      />
                       <Carousel.Caption>
                         <h2 style={captionStyle}>{element.name}</h2>
                       </Carousel.Caption>
-                      <div style={priceStyle}>${element.salePrice}</div>
+                      <p style={priceStyle}>${element.salePrice}</p>
                     </Carousel.Item>
              )}
            )}
