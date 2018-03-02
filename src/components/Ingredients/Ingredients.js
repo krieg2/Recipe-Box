@@ -40,29 +40,35 @@ class Ingredients extends Component {
 
   addFavorite = () => {
 
-    let recipeId = this.state.recipeId;
-    let userId = this.props.fb.auth().currentUser.uid;
+    if(this.props.fb.auth().currentUser){
 
-    this.props.fb.database().ref('/users/'+userId+'/favorites/'+recipeId).set({
-      recipeId: recipeId,
-      image: this.state.image,
-      title: this.state.title,
-      timeStamp : this.props.fb.database.ServerValue.TIMESTAMP
-    });
+      let recipeId = this.state.recipeId;
+      let userId = this.props.fb.auth().currentUser.uid;
 
-    this.setState({isFavorite: true});
+      this.props.fb.database().ref('/users/'+userId+'/favorites/'+recipeId).set({
+        recipeId: recipeId,
+        image: this.state.image,
+        title: this.state.title,
+        timeStamp : this.props.fb.database.ServerValue.TIMESTAMP
+      });
+
+      this.setState({isFavorite: true});
+    }
   };
 
   addToCart = (name, price, image) => {
 
-    let userId = this.props.fb.auth().currentUser.uid;
+    if(this.props.fb.auth().currentUser){
 
-    this.props.fb.database().ref('/users/'+userId+'/cart').push({
-      name: name,
-      price: price,
-      image: image,
-      timeStamp : this.props.fb.database.ServerValue.TIMESTAMP
-    });
+      let userId = this.props.fb.auth().currentUser.uid;
+
+      this.props.fb.database().ref('/users/'+userId+'/cart').push({
+        name: name,
+        price: price,
+        image: image,
+        timeStamp : this.props.fb.database.ServerValue.TIMESTAMP
+      });
+    }
   };
 
   render() {

@@ -60,7 +60,7 @@ const Header = (props) => (
           </Row>
         </Clearfix>
         <Jumbotron style={customStyle}>
-          <h1><i className="fa fa-list-alt"></i>  Recipe Box</h1>
+          <h1><i className="fa fa-list-alt"></i>&nbsp;&nbsp;Recipe Box</h1>
         </Jumbotron>
       </Col>
     </Row>
