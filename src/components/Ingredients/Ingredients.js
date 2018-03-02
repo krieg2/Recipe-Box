@@ -123,7 +123,7 @@ class Ingredients extends Component {
                 </div>
               </Panel.Heading>
               <Panel.Body>
-              <Grid>
+              <Grid fluid style={{margin: "0"}}>
                 <Row>
                   <Col xs={6}>
                   {this.state.items.map( element => {
