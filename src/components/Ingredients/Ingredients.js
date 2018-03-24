@@ -127,6 +127,7 @@ class Ingredients extends Component {
                 <Row>
                   <Col xs={6}>
                   {this.state.items.map( element => {
+                    //console.log(element);
                     delay += 250;
                     return (
                       <Row key={element.name}>
@@ -136,7 +137,7 @@ class Ingredients extends Component {
                         <Col xs={8}>
                           <Well>
                             <i className="fa fa-circle-o" aria-hidden="true"></i>
-                            <span style={wellStyle}>{element.name}</span>
+                            <span style={wellStyle}>{element.originalString}</span>
                           </Well>
                         </Col>
                       </Row>);
@@ -144,6 +145,7 @@ class Ingredients extends Component {
                   </Col>
                   <Col xs={6}>
                     <Image src={this.state.image} style={imageStyle} responsive rounded />
+                    <br />
                     <h3><strong>Recipe: </strong></h3>
                     <p id="recipeInstructions">{this.state.instructions}</p>
                   </Col>
