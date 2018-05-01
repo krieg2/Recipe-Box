@@ -77,7 +77,7 @@ class CarouselBuilder extends Component {
                       <Carousel.Caption>
                         <h2 style={captionStyle}>{element.name}</h2>
                       </Carousel.Caption>
-                      <div style={priceStyle}>${element.salePrice.toFixed(2)}</div>
+                      <div style={priceStyle}>${element.salePrice ? element.salePrice.toFixed(2): 0}</div>
                     </Carousel.Item>
              )}
            )}

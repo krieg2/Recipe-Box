@@ -137,7 +137,7 @@ class Ingredients extends Component {
                         <Col xs={8}>
                           <Well>
                             <i className="fa fa-circle-o" aria-hidden="true"></i>
-                            <span style={wellStyle}>{element.originalString}</span>
+                            <span style={wellStyle}>{element.original}</span>
                           </Well>
                         </Col>
                       </Row>);
